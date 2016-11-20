@@ -9,7 +9,8 @@ setup(
     url='https://github.com/mezz64/python-nut2',
     author='John Mihalic',
     author_email='jtmihalic@gmail.com',
-    download_url='',
+    download_url='https://github.com/mezz64/python-nut2/tarball/2.1.1',
+    keywords=['ups', 'nut', 'network', 'tools'],
     classifiers=[
         'Intended Audience :: Developers',
         'Intended Audience :: Information Technology',
