@@ -1,20 +1,14 @@
 python-nut2
 ===========
 
-[![Build Status](https://travis-ci.org/rshipp/python-nut2.svg?branch=master)][travis]
-[![Coverage Status](https://coveralls.io/repos/rshipp/python-nut2/badge.png)][coveralls]
-[![Code Health](https://landscape.io/github/rshipp/python-nut2/master/landscape.png)][landscape]
-
-[travis]: https://travis-ci.org/rshipp/python-nut2
-[coveralls]: https://coveralls.io/r/rshipp/python-nut2
-[landscape]: https://landscape.io/github/rshipp/python-nut2/master
-
 This is an API overhaul of [PyNUT](https://github.com/networkupstools/nut/tree/master/scripts/python),
 a Python library to allow communication with NUT ([Network UPS Tools](http://www.networkupstools.org/))
 servers.
 
 **Note**: This is an unofficial project, and is in no way supported or
 endorsed by the [Network UPS Tools developers](https://github.com/networkupstools).
+
+Original code by rshipp with Python3 modifications by hordurk.
 
 ## Requirements
 
