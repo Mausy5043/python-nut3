@@ -1,25 +1,15 @@
-import os
-from setuptools import setup
-
-from nut2 import __version__
-
-README = open(os.path.join(os.path.dirname(__file__), 'README.md')).read()
-
-# allow setup.py to be run from any path
-os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
+from disutils.core import setup
 
 setup(
-    name='nut2',
-    version=__version__,
-    py_modules=['nut2'],
-    include_package_data=True,
-    install_requires=[],
+    name='pynut2',
+    packages=['pynut2'],
+    version='2.1.1',
     license='GPL3',
     description='A Python abstraction class to access NUT servers.',
-    long_description=README,
-    url='https://github.com/george2/python-nut2',
-    author='george2',
-    author_email='rpubaddr0@gmail.com',
+    url='https://github.com/mezz64/python-nut2',
+    author='John Mihalic',
+    author_email='jtmihalic@gmail.com',
+    download_url='',
     classifiers=[
         'Intended Audience :: Developers',
         'Intended Audience :: Information Technology',
