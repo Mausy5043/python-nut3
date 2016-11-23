@@ -3,13 +3,13 @@ from distutils.core import setup
 setup(
     name='pynut2',
     packages=['pynut2'],
-    version='2.1.1',
+    version='2.1.2',
     license='GPL3',
     description='A Python abstraction class to access NUT servers.',
     url='https://github.com/mezz64/python-nut2',
     author='John Mihalic',
     author_email='jtmihalic@gmail.com',
-    download_url='https://github.com/mezz64/python-nut2/tarball/2.1.1',
+    download_url='https://github.com/mezz64/python-nut2/tarball/2.1.2',
     keywords=['ups', 'nut', 'network', 'tools'],
     classifiers=[
         'Intended Audience :: Developers',
