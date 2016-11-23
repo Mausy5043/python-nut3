@@ -8,6 +8,8 @@
 
 Copyright (C) 2013 george2
 
+Modifications by mezz64 - 2016
+
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 3 of the License, or
@@ -26,54 +28,63 @@ import telnetlib
 import logging
 
 
-__version__ = '2.1.1'
+__version__ = '2.1.2'
 __all__ = ['PyNUTError', 'PyNUTClient']
 
-logging.basicConfig(level=logging.WARNING,
-                    format="[%(levelname)s] %(message)s")
+_LOGGER = logging.getLogger(__name__)
 
 
 class PyNUTError(Exception):
     """Base class for custom exceptions."""
+    pass
 
 
 class PyNUTClient(object):
     """Access NUT (Network UPS Tools) servers."""
 
     def __init__(self, host="127.0.0.1", port=3493, login=None, password=None,
-                 debug=False, timeout=5, connect=True):
+                 timeout=5, persistent=True):
         """Class initialization method.
 
-        host     : Host to connect (defaults to 127.0.0.1).
-        port     : Port where NUT listens for connections (defaults to 3493).
-        login    : Login used to connect to NUT server (defaults to None
-                   for no authentication).
-        password : Password used when using authentication (defaults to None).
-        debug    : Boolean, put class in debug mode (prints everything
-                   on console, defaults to False).
-        timeout  : Timeout used to wait for network response (defaults
-                   to 5 seconds).
+        host        : Host to connect (defaults to 127.0.0.1).
+        port        : Port where NUT listens for connections (defaults to 3493)
+        login       : Login used to connect to NUT server (defaults to None
+                        for no authentication).
+        password    : Password used for authentication (defaults to None).
+        timeout     : Timeout used to wait for network response (defaults
+                        to 5 seconds).
+        persistent  : Boolean, when true connection will be made in init method
+                        and be held open, when false connection is open/closed
+                        when calling each method
         """
-        if debug:
-            # Print DEBUG messages to the console.
-            logging.getLogger().setLevel(logging.DEBUG)
 
-        logging.debug("Class initialization...")
-        logging.debug(" -> Host = %s (port %s)", host, port)
-        logging.debug(" -> Login = '%s' / '%s'", login, password)
+        _LOGGER.debug("NUT Class initialization, Host/Port: %s:%s,"
+                      " Login: %s/%s", host, port, login, password)
 
         self._host = host
         self._port = port
         self._login = login
         self._password = password
         self._timeout = timeout
+        self._persistent = persistent
         self._srv_handler = None
 
-        if connect:
+        if self._persistent:
             self._connect()
 
     def __del__(self):
         # Try to disconnect cleanly when class is deleted.
+        _LOGGER.debug("NUT Class deleted, trying to disconnect.")
+        self._disconnect()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_t, exc_v, trace):
+        self.__del__()
+
+    def _disconnect(self):
+        """ Disconnects from the defined server."""
         if self._srv_handler:
             try:
                 self._write("LOGOUT\n")
@@ -82,20 +93,12 @@ class PyNUTClient(object):
                 # The socket is already disconnected.
                 pass
 
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_t, exc_v, trace):
-        self.__del__()
-
     def _connect(self):
         """Connects to the defined server.
 
         If login/pass was specified, the class tries to authenticate.
         An error is raised if something goes wrong.
         """
-        logging.debug("Connecting to host")
-
         try:
             self._srv_handler = telnetlib.Telnet(self._host, self._port,
                                                  timeout=self._timeout)
@@ -115,18 +118,33 @@ class PyNUTClient(object):
             raise PyNUTError("Socket error.")
 
     def _read_until(self, string):
-        return self._srv_handler.read_until(string.encode('ascii'),
-                                            self._timeout).decode()
+        """ Wrapper for _srv_handler read_until method."""
+        try:
+            return self._srv_handler.read_until(string.encode('ascii'),
+                                                self._timeout).decode()
+        except (EOFError, BrokenPipeError):
+            _LOGGER.error("NUT2 problem reading from server.")
 
     def _write(self, string):
-        return self._srv_handler.write(string.encode('ascii'))
+        """ Wrapper for _srv_handler write method."""
+        try:
+            return self._srv_handler.write(string.encode('ascii'))
+        except (EOFError, BrokenPipeError):
+            _LOGGER.error("NUT2 problem writing to server.")
 
     def description(self, ups):
         """Returns the description for a given UPS."""
-        logging.debug("description called...")
+        _LOGGER.debug("NUT2 requesting description from server %s", self._host)
+
+        if not self._persistent:
+            self._connect()
 
         self._write("GET UPSDESC %s\n" % ups)
         result = self._read_until("\n")
+
+        if not self._persistent:
+            self._disconnect()
+
         try:
             return result.split('"')[1].strip()
         except IndexError:
@@ -138,7 +156,10 @@ class PyNUTClient(object):
         The result is a dictionary containing 'key->val' pairs of
         'UPSName' and 'UPS Description'.
         """
-        logging.debug("list_ups from server")
+        _LOGGER.debug("NUT2 requesting list_ups from server %s", self._host)
+
+        if not self._persistent:
+            self._connect()
 
         self._write("LIST UPS\n")
         result = self._read_until("\n")
@@ -153,6 +174,9 @@ class PyNUTClient(object):
                 ups, desc = line[len("UPS "):-len('"')].split('"')[:2]
                 ups_dict[ups.strip()] = desc.strip()
 
+        if not self._persistent:
+            self._disconnect()
+
         return ups_dict
 
     def list_vars(self, ups):
@@ -161,7 +185,10 @@ class PyNUTClient(object):
         The result is a dictionary containing 'key->val' pairs of all
         available vars.
         """
-        logging.debug("list_vars called...")
+        _LOGGER.debug("NUT2 requesting list_vars from server %s", self._host)
+
+        if not self._persistent:
+            self._connect()
 
         self._write("LIST VAR %s\n" % ups)
         result = self._read_until("\n")
@@ -177,6 +204,9 @@ class PyNUTClient(object):
             var, data = current[offset:].split('"')[:2]
             ups_vars[var.strip()] = data
 
+        if not self._persistent:
+            self._disconnect()
+
         return ups_vars
 
     def list_commands(self, ups):
@@ -185,7 +215,11 @@ class PyNUTClient(object):
         The result is a dict object with command name as key and a description
         of the command as value.
         """
-        logging.debug("list_commands called...")
+        _LOGGER.debug("NUT2 requesting list_commands from server %s",
+                      self._host)
+
+        if not self._persistent:
+            self._connect()
 
         self._write("LIST CMD %s\n" % ups)
         result = self._read_until("\n")
@@ -212,6 +246,9 @@ class PyNUTClient(object):
             except IndexError:
                 commands[command] = command
 
+        if not self._persistent:
+            self._disconnect()
+
         return commands
 
     def list_clients(self, ups=None):
@@ -220,7 +257,11 @@ class PyNUTClient(object):
         The result is a dictionary containing 'key->val' pairs of
         'UPSName' and a list of clients.
         """
-        logging.debug("list_clients from '%s'...", ups or "server")
+        _LOGGER.debug("NUT2 requesting list_clients from server %s",
+                      self._host)
+
+        if not self._persistent:
+            self._connect()
 
         if ups and (ups not in self.list_ups()):
             raise PyNUTError("%s is not a valid UPS" % ups)
@@ -243,6 +284,9 @@ class PyNUTClient(object):
                     clients[ups] = []
                 clients[ups].append(host)
 
+        if not self._persistent:
+            self._disconnect()
+
         return clients
 
     def list_rw_vars(self, ups):
@@ -251,7 +295,11 @@ class PyNUTClient(object):
         The result is presented as a dictionary containing 'key->val'
         pairs.
         """
-        logging.debug("list_vars from '%s'...", ups)
+        _LOGGER.debug("NUT2 requesting list_rw_vars from server %s",
+                      self._host)
+
+        if not self._persistent:
+            self._connect()
 
         self._write("LIST RW %s\n" % ups)
         result = self._read_until("\n")
@@ -267,6 +315,9 @@ class PyNUTClient(object):
             var, data = current[offset:].split('"')[:2]
             rw_vars[var.strip()] = data
 
+        if not self._persistent:
+            self._disconnect()
+
         return rw_vars
 
     def list_enum(self, ups, var):
@@ -274,7 +325,11 @@ class PyNUTClient(object):
 
         The result is presented as a list.
         """
-        logging.debug("list_enum from '%s'...", ups)
+        _LOGGER.debug("NUT2 requesting list_enum from server %s",
+                      self._host)
+
+        if not self._persistent:
+            self._connect()
 
         self._write("LIST ENUM %s %s\n" % (ups, var))
         result = self._read_until("\n")
@@ -284,6 +339,9 @@ class PyNUTClient(object):
         result = self._read_until("END LIST ENUM %s %s\n" % (ups, var))
         offset = len("ENUM %s %s" % (ups, var))
         end_offset = 0 - (len("END LIST ENUM %s %s\n" % (ups, var)) + 1)
+
+        if not self._persistent:
+            self._disconnect()
 
         try:
             return [c[offset:].split('"')[1].strip()
@@ -296,7 +354,11 @@ class PyNUTClient(object):
 
         The result is presented as a list.
         """
-        logging.debug("list_range from '%s'...", ups)
+        _LOGGER.debug("NUT2 requesting list_range from server %s",
+                      self._host)
+
+        if not self._persistent:
+            self._connect()
 
         self._write("LIST RANGE %s %s\n" % (ups, var))
         result = self._read_until("\n")
@@ -306,6 +368,9 @@ class PyNUTClient(object):
         result = self._read_until("END LIST RANGE %s %s\n" % (ups, var))
         offset = len("RANGE %s %s" % (ups, var))
         end_offset = 0 - (len("END LIST RANGE %s %s\n" % (ups, var)) + 1)
+
+        if not self._persistent:
+            self._disconnect()
 
         try:
             return [c[offset:].split('"')[1].strip()
@@ -319,19 +384,35 @@ class PyNUTClient(object):
         The variable must be a writable value (cf list_rw_vars) and you
         must have the proper rights to set it (maybe login/password).
         """
-        logging.debug("set_var '%s' from '%s' to '%s'", var, ups, value)
+        _LOGGER.debug("NUT2 setting set_var '%s' on '%s' to '%s'",
+                      var, self._host, value)
+
+        if not self._persistent:
+            self._connect()
 
         self._write("SET VAR %s %s %s\n" % (ups, var, value))
         result = self._read_until("\n")
+
         if result != "OK\n":
             raise PyNUTError(result.replace("\n", ""))
 
+        if not self._persistent:
+            self._disconnect()
+
     def get_var(self, ups, var):
         """Get the value of a variable."""
-        logging.debug("get_var called...")
+        _LOGGER.debug("NUT2 requesting get_var '%s' on '%s'.",
+                      var, self._host)
+
+        if not self._persistent:
+            self._connect()
 
         self._write("GET VAR %s %s\n" % (ups, var))
         result = self._read_until("\n")
+
+        if not self._persistent:
+            self._disconnect()
+
         try:
             # result = 'VAR %s %s "%s"\n' % (ups, var, value)
             return result.split('"')[1].strip()
@@ -345,10 +426,18 @@ class PyNUTClient(object):
 
     def var_description(self, ups, var):
         """Get a variable's description."""
-        logging.debug("var_description called...")
+        _LOGGER.debug("NUT2 requesting var_description '%s' on '%s'.",
+                      var, self._host)
+
+        if not self._persistent:
+            self._connect()
 
         self._write("GET DESC %s %s\n" % (ups, var))
         result = self._read_until("\n")
+
+        if not self._persistent:
+            self._disconnect()
+
         try:
             # result = 'DESC %s %s "%s"\n' % (ups, var, description)
             return result.split('"')[1].strip()
@@ -357,10 +446,18 @@ class PyNUTClient(object):
 
     def var_type(self, ups, var):
         """Get a variable's type."""
-        logging.debug("var_type called...")
+        _LOGGER.debug("NUT2 requesting var_type '%s' on '%s'.",
+                      var, self._host)
+
+        if not self._persistent:
+            self._connect()
 
         self._write("GET TYPE %s %s\n" % (ups, var))
         result = self._read_until("\n")
+
+        if not self._persistent:
+            self._disconnect()
+
         try:
             # result = 'TYPE %s %s %s\n' % (ups, var, type)
             type_ = ' '.join(result.split(' ')[3:]).strip()
@@ -373,10 +470,18 @@ class PyNUTClient(object):
 
     def command_description(self, ups, command):
         """Get a command's description."""
-        logging.debug("command_description called...")
+        _LOGGER.debug("NUT2 requesting command_description '%s' on '%s'.",
+                      command, self._host)
+
+        if not self._persistent:
+            self._connect()
 
         self._write("GET CMDDESC %s %s\n" % (ups, command))
         result = self._read_until("\n")
+
+        if not self._persistent:
+            self._disconnect()
+
         try:
             # result = 'CMDDESC %s %s "%s"' % (ups, command, description)
             return result.split('"')[1].strip()
@@ -385,36 +490,57 @@ class PyNUTClient(object):
 
     def run_command(self, ups, command):
         """Send a command to the specified UPS."""
-        logging.debug("run_command called...")
+        _LOGGER.debug("NUT2 run_command called '%s' on '%s'.",
+                      command, self._host)
+
+        if not self._persistent:
+            self._connect()
 
         self._write("INSTCMD %s %s\n" % (ups, command))
         result = self._read_until("\n")
+
         if result != "OK\n":
             raise PyNUTError(result.replace("\n", ""))
 
+        if not self._persistent:
+            self._disconnect()
+
     def fsd(self, ups):
         """Send MASTER and FSD commands."""
-        logging.debug("MASTER called...")
+        _LOGGER.debug("NUT2 MASTER called on '%s'.", self._host)
+
+        if not self._persistent:
+            self._connect()
 
         self._write("MASTER %s\n" % ups)
         result = self._read_until("\n")
         if result != "OK MASTER-GRANTED\n":
             raise PyNUTError(("Master level function are not available", ""))
 
-        logging.debug("FSD called...")
+        _LOGGER.debug("FSD called...")
         self._write("FSD %s\n" % ups)
         result = self._read_until("\n")
         if result != "OK FSD-SET\n":
             raise PyNUTError(result.replace("\n", ""))
 
+        if not self._persistent:
+            self._disconnect()
+
     def num_logins(self, ups):
         """Send GET NUMLOGINS command to get the number of users logged
         into a given UPS.
         """
-        logging.debug("num_logins called on '%s'...", ups)
+        _LOGGER.debug("NUT2 requesting num_logins called on '%s'", self._host)
+
+        if not self._persistent:
+            self._connect()
 
         self._write("GET NUMLOGINS %s\n" % ups)
         result = self._read_until("\n")
+
+        if not self._persistent:
+            self._disconnect()
+
         try:
             # result = "NUMLOGINS %s %s\n" % (ups, int(numlogins))
             return int(result.split(' ')[2].strip())
@@ -423,14 +549,28 @@ class PyNUTClient(object):
 
     def help(self):
         """Send HELP command."""
-        logging.debug("HELP called...")
+        _LOGGER.debug("NUT2 HELP called on '%s'", self._host)
+
+        if not self._persistent:
+            self._connect()
 
         self._write("HELP\n")
+
+        if not self._persistent:
+            self._disconnect()
+
         return self._read_until("\n")
 
     def ver(self):
         """Send VER command."""
-        logging.debug("VER called...")
+        _LOGGER.debug("NUT2 VER called on '%s'", self._host)
+
+        if not self._persistent:
+            self._connect()
 
         self._write("VER\n")
+
+        if not self._persistent:
+            self._disconnect()
+
         return self._read_until("\n")
