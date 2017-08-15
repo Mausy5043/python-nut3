@@ -1,3 +1,5 @@
+[![PyPI](https://img.shields.io/pypi/v/pynut2.svg)](https://pypi.python.org/pypi/pynut2)
+
 python-nut2
 ===========
 
