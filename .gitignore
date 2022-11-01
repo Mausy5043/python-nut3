@@ -1,3 +1,28 @@
+### PyCharm ###
+.idea/
+
+### Visual Studio local settings ###
+.vscode/
+
+.local/
+
+### Jupyter ###
+.ipynb_checkpoints/
+# pyenv
+.python-version
+
+### Apple muck ###
+.DS_Store
+
+# Environments
+.env
+.venv
+# env/ # duplicated
+venv/
+ENV/
+env.bak/
+venv.bak/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
