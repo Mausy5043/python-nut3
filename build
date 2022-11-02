@@ -38,7 +38,7 @@ dist_app() {
     LOCATION=$1
     echo "Upload distribution package to PyPi from $LOCATION"
     # throw away files if upload was succesful
-    python3 -m twine upload --repository pypi dist/* && rm dist/*
+    python3 -m twine upload --repository pypi dist/*   # && rm dist/*
     echo ""
     echo "To install this package use:"
     echo "python3 -m pip install ${PACKAGE_NAME}"
