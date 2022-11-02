@@ -1,0 +1,55 @@
+
+# pyproject.toml tells “frontend” build tools like pip and build what “backend” tool to use to create distribution
+# packages for your project. You can choose from a number of backends; this tutorial uses Hatchling by default, but it
+# will work identically with setuptools, Flit, PDM, and others that support the [project] table for metadata.
+#
+#  *  requires is a list of packages that are needed to build your package. You don’t need to install them;
+#     build frontends like pip will install them automatically in a temporary, isolated virtual environment
+#     for use during the build process.
+#  *  build-backend is the name of the Python object that frontends will use to perform the build.
+
+
+# Hatchling  https://packaging.python.org/en/latest/key_projects/#hatch
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pynut3"
+version = "3.0.0"
+dependencies = []
+authors = [
+  { name="Mausy5043", email="mausy5043@example.com" },
+]
+description = "Common python functions"
+readme = "README.md"
+requires-python = ">=3.2"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/Mausy5043/python-nut3"
+"Bug Tracker" = "https://github.com/Mausy5043/python-nut3/issues"
+
+#  *  `name` is the distribution name of your package. This can be any name as long as it only contains letters,
+#     numbers, ., _ , and -. It also must not already be taken on PyPI.
+#  *  `version` is the package version. See the version specifier specification for more details on versions. Some build
+#     backends allow it to be specified another way, such as from a file or a git tag.
+#  *  `authors` is used to identify the author of the package; you specify a name and an email for each author. You can
+#     also list maintainers in the same format.
+#  *  `description` is a short, one-sentence summary of the package.
+#  *  `readme` is a path to a file containing a detailed description of the package. This is shown on the package detail
+#     page on PyPI. In this case, the description is loaded from README.md (which is a common pattern). There also is
+#     a more advanced table form described in the project metadata specification.
+#  *  `requires-python` gives the versions of Python supported by your project. Installers like pip will look back
+#     through older versions of packages until it finds one that has a matching Python version.
+#  *  `classifiers` gives the index and pip some additional metadata about your package. In this case, the package is
+#     only compatible with Python 3, is licensed under the MIT license, and is OS-independent. You should always
+#     include at least which version(s) of Python your package works on, which license your package is available under,
+#     and which operating systems your package will work on. For a complete list of classifiers,
+#     see https://pypi.org/classifiers/.
+#  *  `urls` lets you list any number of extra links to show on PyPI. Generally this could be to the source,
+#     documentation, issue trackers, etc.
