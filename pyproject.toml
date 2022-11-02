@@ -16,7 +16,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pynut3"
-version = "0.0.0"
+version = "0.0.2"
 dependencies = []
 authors = [
   { name="Mausy5043", email="mausy5043@example.com" },
