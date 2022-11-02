@@ -3,14 +3,14 @@
 
 # This source code is provided for testing/debuging purpose ;)
 
-from nut2 import PyNUTClient
+from nut3 import PyNUT3Client
 import sys
 
 if __name__ == "__main__" :
 
-    print( "PyNUTClient test..." )
-    nut    = PyNUTClient( debug=True )
-    #nut    = PyNUTClient( login="upsadmin", password="upsadmin", debug=True )
+    print( "PyNUT3Client test..." )
+    nut    = PyNUT3Client( debug=True )
+    #nut    = PyNUT3Client( login="upsadmin", password="upsadmin", debug=True )
 
     print( 80*"-" + "\nTesting 'GetUPSList' :")
     result = nut.GetUPSList( )
