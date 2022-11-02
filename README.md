@@ -1,6 +1,6 @@
-[![PyPI](https://img.shields.io/pypi/v/pynut2.svg)](https://pypi.python.org/pypi/pynut2)
+[![PyPI](https://img.shields.io/pypi/v/pynut3.svg)](https://pypi.python.org/pypi/pynut3)
 
-python-nut2
+python-nut3
 ===========
 
 This is an API overhaul of [PyNUT](https://github.com/networkupstools/nut/tree/master/scripts/python),
@@ -14,27 +14,26 @@ Original code by rshipp with Python3 modifications by hordurk.
 
 ## Requirements
 
-The module itself requires only Python (known to work with versions 2.6 through
-3.4). If you wish to run the tests, do `pip install -r requirements-testing.txt`.
+The module itself requires only Python3 (Python2 may work but is not supported). If you wish to run the tests, do `pip install -r requirements-testing.txt`.
 
 ## Usage
 
 ```python
-from nut2 import PyNUTClient
-client = PyNUTClient()
+from pynut3 import PyNUT3Client
+client = PyNUT3Client()
 client.help()
 client.list_ups()
 client.list_vars("My_UPS")
 ```
 
 Please note that this module has completely and intentionally broken
-backwards compatibility with PyNUT 1.X.
+backwards compatibility with previous versions of PyNUT.
 
 ## Installation
 
-    python setup.py install
+    pip install pynut3
 
-## PyNUT
+## PyNUT3
 
 The following information is copied from the original PyNUT README:
 
@@ -48,7 +47,7 @@ The following information is copied from the original PyNUT README:
 > To import it on Python programs you have to use the following (case sensitive) :
 > 'import PyNUT'
 > 
-> This module provides a 'PyNUTClient' class that can be used to connect and get
+> This module provides a 'PyNUT3Client' class that can be used to connect and get
 > data from an upsd data server.
 > 
 > To install the PyNUT module on Debian/Ubuntu, copy it to:
