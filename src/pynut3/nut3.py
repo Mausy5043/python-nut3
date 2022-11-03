@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """A Python module for dealing with NUT (Network UPS Tools) servers.
@@ -8,6 +9,7 @@
 Copyright (C) 2013 george2
 
 Modifications by mezz64 - 2016
+Modifications by Mausy5043 - 2022
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
