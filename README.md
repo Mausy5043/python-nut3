@@ -11,7 +11,7 @@ endorsed by the [Network UPS Tools developers](https://github.com/networkupstool
 
 ## Requirements
 
-The module itself requires only Python3 (Python2 may work but is nolonger supported). If you wish to run the tests, do `pip install -r requirements-testing.txt` first.
+The module itself requires only Python3 (Python2 may work but is nolonger supported).
 
 ## Installation
 
