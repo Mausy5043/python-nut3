@@ -60,7 +60,7 @@ class PyNUT3Client(object):
                         when calling each method
         """
 
-        _LOGGER.debug('NUT Class initialization, Host/Port: %s:%s, Login: %s', host, port, login)
+        _LOGGER.debug(f'NUT Class initialization, Host/Port: {host}:{port}, Login: {login}')
 
         self._host: str = host
         self._port: int = port
@@ -139,7 +139,7 @@ class PyNUT3Client(object):
 
     def description(self, ups: str) -> str:
         """Returns the description for a given UPS."""
-        _LOGGER.debug('NUT3 requesting description from server %s', self._host)
+        _LOGGER.debug(f'NUT3 requesting description from server {self._host}')
 
         if not self._persistent:
             self._connect()
@@ -161,7 +161,7 @@ class PyNUT3Client(object):
         The result is a dictionary containing 'key->val' pairs of
         'UPSName' and 'UPS Description'.
         """
-        _LOGGER.debug('NUT3 requesting list_ups from server %s', self._host)
+        _LOGGER.debug(f'NUT3 requesting list_ups from server {self._host}')
 
         if not self._persistent:
             self._connect()
@@ -196,7 +196,7 @@ class PyNUT3Client(object):
         The result is a dictionary containing 'key->val' pairs of all
         available vars.
         """
-        _LOGGER.debug("NUT3 requesting list_vars from server %s", self._host)
+        _LOGGER.debug(f"NUT3 requesting list_vars from server {self._host}")
 
         if not self._persistent:
             self._connect()
@@ -232,8 +232,7 @@ class PyNUT3Client(object):
         The result is a dict object with command name as key and a description
         of the command as value.
         """
-        _LOGGER.debug("NUT3 requesting list_commands from server %s",
-                      self._host)
+        _LOGGER.debug(f"NUT3 requesting list_commands from server {self._host}")
 
         if not self._persistent:
             self._connect()
@@ -278,8 +277,7 @@ class PyNUT3Client(object):
         The result is a dictionary containing 'key->val' pairs of
         'UPSName' and a list of clients.
         """
-        _LOGGER.debug("NUT3 requesting list_clients from server %s",
-                      self._host)
+        _LOGGER.debug(f"NUT3 requesting list_clients from server {self._host}")
 
         if not self._persistent:
             self._connect()
@@ -321,7 +319,7 @@ class PyNUT3Client(object):
         The result is presented as a dictionary containing 'key->val'
         pairs.
         """
-        _LOGGER.debug("NUT3 requesting list_rw_vars from server %s", self._host)
+        _LOGGER.debug(f"NUT3 requesting list_rw_vars from server {self._host}")
 
         if not self._persistent:
             self._connect()
@@ -355,7 +353,7 @@ class PyNUT3Client(object):
 
         The result is presented as a list.
         """
-        _LOGGER.debug("NUT3 requesting list_enum from server %s", self._host)
+        _LOGGER.debug(f"NUT3 requesting list_enum from server {self._host}")
 
         if not self._persistent:
             self._connect()
@@ -384,7 +382,7 @@ class PyNUT3Client(object):
 
         The result is presented as a list.
         """
-        _LOGGER.debug("NUT3 requesting list_range from server %s", self._host)
+        _LOGGER.debug(f"NUT3 requesting list_range from server {self._host}")
 
         if not self._persistent:
             self._connect()
@@ -414,7 +412,7 @@ class PyNUT3Client(object):
         The variable must be a writable value (cf list_rw_vars) and you
         must have the proper rights to set it (maybe login/password).
         """
-        _LOGGER.debug("NUT3 setting set_var '%s' on '%s' to '%s'", var, self._host, value)
+        _LOGGER.debug(f"NUT3 setting set_var '{var}' on '{self._host}' to '{value}'")
 
         if not self._persistent:
             self._connect()
@@ -430,7 +428,7 @@ class PyNUT3Client(object):
 
     def get_var(self, ups: str, var: str) -> str:
         """Get the value of a variable."""
-        _LOGGER.debug("NUT3 requesting get_var '%s' on '%s'.", var, self._host)
+        _LOGGER.debug(f"NUT3 requesting get_var '{var}' on '{self._host}'.")
 
         if not self._persistent:
             self._connect()
@@ -453,7 +451,7 @@ class PyNUT3Client(object):
 
     def var_description(self, ups: str, var: str) -> str:
         """Get a variable's description."""
-        _LOGGER.debug("NUT3 requesting var_description '%s' on '%s'.", var, self._host)
+        _LOGGER.debug(f"NUT3 requesting var_description '{var}' on '{self._host}'.")
 
         if not self._persistent:
             self._connect()
@@ -471,7 +469,7 @@ class PyNUT3Client(object):
 
     def var_type(self, ups: str, var: str) -> str:
         """Get a variable's type."""
-        _LOGGER.debug("NUT3 requesting var_type '%s' on '%s'.", var, self._host)
+        _LOGGER.debug(f"NUT3 requesting var_type '{var}' on '{self._host}'.")
 
         if not self._persistent:
             self._connect()
@@ -493,7 +491,7 @@ class PyNUT3Client(object):
 
     def command_description(self, ups: str, command: str) -> str:
         """Get a command's description."""
-        _LOGGER.debug("NUT3 requesting command_description '%s' on '%s'.", command, self._host)
+        _LOGGER.debug(f"NUT3 requesting command_description '{command}' on '{self._host}'.")
 
         if not self._persistent:
             self._connect()
@@ -511,7 +509,7 @@ class PyNUT3Client(object):
 
     def run_command(self, ups: str, command: str) -> None:
         """Send a command to the specified UPS."""
-        _LOGGER.debug("NUT3 run_command called '%s' on '%s'.", command, self._host)
+        _LOGGER.debug(f"NUT3 run_command called '{command}' on '{self._host}'.")
 
         if not self._persistent:
             self._connect()
@@ -527,7 +525,7 @@ class PyNUT3Client(object):
 
     def fsd(self, ups: str) -> None:
         """Send MASTER and FSD commands."""
-        _LOGGER.debug("NUT3 MASTER called on '%s'.", self._host)
+        _LOGGER.debug("NUT3 MASTER called on '{self._host}'.")
 
         if not self._persistent:
             self._connect()
@@ -550,7 +548,7 @@ class PyNUT3Client(object):
         """Send GET NUMLOGINS command to get the number of users logged
         into a given UPS.
         """
-        _LOGGER.debug("NUT3 requesting num_logins called on '%s'", self._host)
+        _LOGGER.debug(f"NUT3 requesting num_logins called on '{self._host}'")
 
         if not self._persistent:
             self._connect()
@@ -568,7 +566,7 @@ class PyNUT3Client(object):
 
     def help(self) -> str:
         """Send HELP command."""
-        _LOGGER.debug("NUT3 HELP called on '%s'", self._host)
+        _LOGGER.debug(f"NUT3 HELP called on '{self._host}'")
 
         if not self._persistent:
             self._connect()
@@ -582,7 +580,7 @@ class PyNUT3Client(object):
 
     def ver(self) -> str:
         """Send VER command."""
-        _LOGGER.debug("NUT3 VER called on '%s'", self._host)
+        _LOGGER.debug(f"NUT3 VER called on '{self._host}'")
 
         if not self._persistent:
             self._connect()
