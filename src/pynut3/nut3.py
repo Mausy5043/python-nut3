@@ -535,7 +535,7 @@ class PyNUT3Client:
         self._write(f'MASTER {ups}\n')
         result: str = self._read_until('\n')
         if result != 'OK MASTER-GRANTED\n':
-            raise PyNUT3Error(('Master level function are not available', ''))
+            raise PyNUT3Error(('Master level functions are not available', ''))
 
         _LOGGER.debug('FSD called...')
         self._write(f'FSD {ups}\n')
