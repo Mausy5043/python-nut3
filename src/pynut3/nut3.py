@@ -135,7 +135,8 @@ class PyNUT3Client:
         try:
             if self._srv_handler is None:
                 raise RuntimeError('NUT3 connection has not been opened.')
-            return self._srv_handler.write(string.encode('ascii'))
+            self._srv_handler.write(string.encode('ascii'))
+            return
         except (EOFError, BrokenPipeError):
             _LOGGER.error('NUT3 problem writing to server.')
 
