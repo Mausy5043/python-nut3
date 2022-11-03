@@ -117,8 +117,8 @@ class PyNUT3Client:
                 result = self._read_until('\n')
                 if result != 'OK\n':
                     raise PyNUT3Error(result.replace('\n', ''))
-        except socket.error:
-            raise PyNUT3Error('Socket error.')
+        except socket.error as exc:
+            raise PyNUT3Error('Socket error.') from exc
 
     def _read_until(self, string: str) -> str:
         """ Wrapper for _srv_handler read_until method."""
@@ -154,8 +154,8 @@ class PyNUT3Client:
 
         try:
             return result.split('"')[1].strip()
-        except IndexError:
-            raise PyNUT3Error(result.replace('\n', ''))
+        except IndexError as exc:
+            raise PyNUT3Error(result.replace('\n', '')) from exc
 
     def list_ups(self) -> Dict[str, str]:
         """Returns the list of available UPS from the NUT server.
@@ -376,8 +376,8 @@ class PyNUT3Client:
             return [c[offset:].split('"')[1].strip()
                     for c in result[:end_offset].split('\n')
                     if '"' in c[offset:]]
-        except IndexError:
-            raise PyNUT3Error(result.replace('\n', ''))
+        except IndexError as exc:
+            raise PyNUT3Error(result.replace('\n', '')) from exc
 
     def list_range(self, ups: str, var: str) -> List[str]:
         """Get a list of valid values for an range variable.
@@ -405,8 +405,8 @@ class PyNUT3Client:
             return [c[offset:].split('"')[1].strip()
                     for c in result[:end_offset].split('\n')
                     if '"' in c[offset:]]
-        except IndexError:
-            raise PyNUT3Error(result.replace('\n', ''))
+        except IndexError as exc:
+            raise PyNUT3Error(result.replace('\n', '')) from exc
 
     def set_var(self, ups: str, var: str, value: str) -> None:
         """Set a variable to the specified value on selected UPS.
@@ -443,8 +443,8 @@ class PyNUT3Client:
 
         try:
             return result.split('"')[1].strip()
-        except IndexError:
-            raise PyNUT3Error(result.replace('\n', ''))
+        except IndexError as exc:
+            raise PyNUT3Error(result.replace('\n', '')) from exc
 
     # Alias for convenience
     def get(self, ups: str, var: str) -> str:
@@ -466,8 +466,8 @@ class PyNUT3Client:
 
         try:
             return result.split('"')[1].strip()
-        except IndexError:
-            raise PyNUT3Error(result.replace('\n', ''))
+        except IndexError as exc:
+            raise PyNUT3Error(result.replace('\n', '')) from exc
 
     def var_type(self, ups: str, var: str) -> str:
         """Get a variable's type."""
@@ -488,8 +488,8 @@ class PyNUT3Client:
             assert len(type_) > 0
             assert result.startswith('TYPE')
             return type_
-        except AssertionError:
-            raise PyNUT3Error(result.replace('\n', ''))
+        except AssertionError as exc:
+            raise PyNUT3Error(result.replace('\n', '')) from exc
 
     def command_description(self, ups: str, command: str) -> str:
         """Get a command's description."""
@@ -506,8 +506,8 @@ class PyNUT3Client:
 
         try:
             return result.split('"')[1].strip()
-        except IndexError:
-            raise PyNUT3Error(result.replace('\n', ''))
+        except IndexError as exc:
+            raise PyNUT3Error(result.replace('\n', '')) from exc
 
     def run_command(self, ups: str, command: str) -> None:
         """Send a command to the specified UPS."""
@@ -563,8 +563,8 @@ class PyNUT3Client:
 
         try:
             return int(result.split(' ')[2].strip())
-        except (ValueError, IndexError):
-            raise PyNUT3Error(result.replace('\n', ''))
+        except (ValueError, IndexError) as exc:
+            raise PyNUT3Error(result.replace('\n', '')) from exc
 
     def help(self) -> str:
         """Send HELP command."""
