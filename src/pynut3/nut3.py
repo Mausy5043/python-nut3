@@ -36,7 +36,9 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class PyNUT3Error(Exception):
-    """Base class for custom exceptions."""
+    """Base class for custom exceptions.
+    """
+    # pylint: disable=unnecessary-pass
     pass
 
 
