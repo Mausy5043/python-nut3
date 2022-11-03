@@ -76,7 +76,7 @@ class PyNUT3Client:
             self._connect()
 
     def __del__(self) -> None:
-        # Try to disconnect cleanly when class is deleted.
+        """Try to disconnect cleanly when class is deleted."""
         _LOGGER.debug('NUT Class deleted, trying to disconnect.')
         self._disconnect()
 
