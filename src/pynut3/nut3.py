@@ -40,7 +40,7 @@ class PyNUT3Error(Exception):
     pass
 
 
-class PyNUT3Client(object):
+class PyNUT3Client:
     """Access NUT (Network UPS Tools) servers."""
 
     def __init__(self, host: str = '127.0.0.1', port: int = 3493,
