@@ -35,7 +35,7 @@ for k1, v1 in ups_dict.items():
 
 Please note that this module has completely and intentionally broken backwards compatibility with previous versions of PyNUT.
 
-## Acknowledgments
+## Acknowledgements
 
 Based on various NUT Client related Python scripts, written by David Goncalves as [PyNUT](https://github.com/networkupstools/nut/tree/master/scripts/python), and released under GPL v3.   
 Later overhauled by rshipp with Python3 modifications by hordurk, george2 and mezz64.
