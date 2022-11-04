@@ -5,17 +5,13 @@
 
 version: 2
 updates:
-  - package-ecosystem: "" # See documentation for possible values
-    directory: "/" # Location of package manifests
-    target-branch: "Mausy5043-bot"
-    schedule:
-      interval: "weekly"
+
 
   # Enable version updates for GitHub Actions
   - package-ecosystem: 'github-actions'
     # or GitHub Actions, set the directory to / to check for workflow files in .github/workflows.
     directory: '/'
-    target-branch: "Mausy5043-bot"
+    target-branch: "master"
     schedule:
       interval: 'daily'
 
@@ -23,6 +19,6 @@ updates:
   - package-ecosystem: 'pip'
   # Look for `requirements.txt` file
     directory: '/'
-    target-branch: "Mausy5043-bot"
+    target-branch: "master"
     schedule:
       interval: 'daily'
