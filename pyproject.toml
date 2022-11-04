@@ -12,7 +12,7 @@ dependencies = []
 authors = [
   { name="Mausy5043", email="mausy5043@example.com" },
 ]
-description = "Common python functions"
+description = "A Python3 abstraction class to access NUT servers for uninterruptible power supplies (UPS)."
 readme = "README.md"
 requires-python = ">=3.2"
 classifiers = [
