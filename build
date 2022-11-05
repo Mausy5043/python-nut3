@@ -52,6 +52,8 @@ update_local_repo() {
     git pull || exit 1
 }
 
+find . -type f -name "*.py" | xargs pylint --rcfile .pylintrc --errors-only
+
 # check commandline parameters
 case $CMD in
     -b | --build)
