@@ -163,7 +163,7 @@ class PyNUT3Client:
         except IndexError as exc:
             raise PyNUT3Error(result.replace('\n', '')) from exc
 
-    def list_ups(self) -> Dict[str, str]:
+    def get_dict_ups(self) -> Dict[str, str]:
         """Returns the list of available UPS from the NUT server.
 
         The result is a dictionary containing 'key->val' pairs of
@@ -198,7 +198,7 @@ class PyNUT3Client:
 
         return ups_dict
 
-    def list_vars(self, ups: str) -> Dict[str, str]:
+    def get_dict_vars(self, ups: str) -> Dict[str, str]:
         """Get all available vars from the specified UPS.
 
         The result is a dictionary containing 'key->val' pairs of all
@@ -234,7 +234,7 @@ class PyNUT3Client:
 
         return ups_vars
 
-    def list_commands(self, ups: str) -> Dict[str, str]:
+    def get_dict_commands(self, ups: str) -> Dict[str, str]:
         """Get all available commands for the specified UPS.
 
         The result is a dict object with command name as key and a description
@@ -279,7 +279,7 @@ class PyNUT3Client:
 
         return commands
 
-    def list_clients(self, ups: str = '') -> Dict[str, List[str]]:
+    def get_dict_clients(self, ups: str = '') -> Dict[str, List[str]]:
         """Returns the list of connected clients from the NUT server.
 
         The result is a dictionary containing 'key->val' pairs of
@@ -290,7 +290,7 @@ class PyNUT3Client:
         if not self._persistent:
             self._connect()
 
-        if ups and (ups not in self.list_ups()):
+        if ups and (ups not in self.get_dict_ups()):
             raise PyNUT3Error(f'{ups} is not a valid UPS')
 
         if ups:
@@ -321,7 +321,7 @@ class PyNUT3Client:
 
         return clients
 
-    def list_rw_vars(self, ups: str) -> Dict[str, str]:
+    def get_dict_rw_vars(self, ups: str) -> Dict[str, str]:
         """Get a list of all writable vars from the selected UPS.
 
         The result is presented as a dictionary containing 'key->val'
