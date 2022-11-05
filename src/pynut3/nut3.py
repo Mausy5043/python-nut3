@@ -49,7 +49,8 @@ class PyNUT3Client:
 
     def __init__(self, host: str = '127.0.0.1', port: int = 3493,
                  login: Optional[str] = None, password: Optional[str] = None,
-                 timeout: float = 5, persistent: bool = True) -> None:
+                 timeout: float = 5, persistent: bool = True,
+                 debug: bool = True) -> None:
         """Class initialization method.
 
         host        : Host to connect (defaults to 127.0.0.1).
@@ -62,10 +63,12 @@ class PyNUT3Client:
         persistent  : Boolean, when true connection will be made in init method
                         and be held open, when false connection is open/closed
                         when calling each method
+        debug       : Boolean, put class in debug mode (prints everything
+                        on console, defaults to False).
         """
-
         _LOGGER.debug(f'NUT Class initialization, Host/Port: {host}:{port}, Login: {login}')
 
+        self._debug = debug
         self._host: str = host
         self._port: int = port
         self._login: Optional[str] = login
