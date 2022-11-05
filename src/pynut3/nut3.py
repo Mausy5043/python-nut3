@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""A Python module for dealing with NUT (Network UPS Tools) servers.
+"""A Python3 module for dealing with NUT (Network UPS Tools) servers.
 
 * PyNUT3Error: Base class for custom exceptions.
 * PyNUT3Client: Allows connecting to and communicating with PyNUT servers.
@@ -31,7 +31,7 @@ import socket
 from telnetlib import Telnet
 from typing import Any, Dict, List, Optional
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 __all__ = ['PyNUT3Error', 'PyNUT3Client']
 
 _LOGGER = logging.getLogger(__name__)
