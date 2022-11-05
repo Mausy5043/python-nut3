@@ -43,7 +43,7 @@ def demo(ip: str):
     # client.ver returns a string
     print(f"\nNUT driver version: {client.ver()}")
     print(f"Scanning for UPSes...")
-    ups_dict = client.list_ups()
+    ups_dict = client.get_dict_ups()
     for ups_id, desc in ups_dict.items():
         print(f"'{desc}' is called with id '{ups_id}'")
 
@@ -55,7 +55,7 @@ def demo(ip: str):
 
         # client.list_commands returns a dict
         try:
-            clnts_dict = client.list_clients(ups_id)
+            clnts_dict = client.get_dict_clients(ups_id)
             print(f"\nUPS '{ups_id}' has the following clients connected")
             for var, value in clnts_dict.items():
                 print(f"{var:<36}: {value}")
@@ -63,8 +63,8 @@ def demo(ip: str):
             print(f"\n** UPS '{ups_id}' does not support listing it's clients")
 
         # client.list_vars returns a dict
-        vars_dict = client.list_vars(ups_id)
-        rw_vars_dict = client.list_rw_vars(ups_id)
+        vars_dict = client.get_dict_vars(ups_id)
+        rw_vars_dict = client.get_dict_rw_vars(ups_id)
         print(f"\nUPS '{ups_id}' has the following variables available:")
         for var, value in vars_dict.items():
             rw_ro = "  (r-)"
@@ -73,7 +73,7 @@ def demo(ip: str):
             print(f"{rw_ro} {var:<36}: {value}")
 
         # client.list_commands returns a dict
-        cmds_dict = client.list_commands(ups_id)
+        cmds_dict = client.get_dict_commands(ups_id)
         print(f"\nUPS '{ups_id}' has the following commands available")
         for var, value in cmds_dict.items():
             print(f"{var:<20}: {value}")
