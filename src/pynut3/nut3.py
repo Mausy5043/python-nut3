@@ -529,7 +529,7 @@ class PyNUT3Client:
             self._disconnect()
 
     def fsd(self, ups: str) -> None:
-        """Send MASTER and FSD commands."""
+        """Send MASTER and Forced ShutDown (FSD) commands."""
         _LOGGER.debug("NUT3 MASTER called on '{self._host}'.")
 
         if not self._persistent:
