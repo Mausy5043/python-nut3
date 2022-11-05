@@ -47,6 +47,7 @@ class PyNUT3Error(Exception):
 class PyNUT3Client:
     """Access NUT (Network UPS Tools) servers."""
 
+    # pylint: disable=too-many-instance-attributes
     def __init__(self, host: str = '127.0.0.1', port: int = 3493,
                  login: Optional[str] = None, password: Optional[str] = None,
                  timeout: float = 5, persistent: bool = True,
