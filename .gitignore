@@ -1,39 +1,29 @@
+# Created by https://www.gitignore.io/api/python,pycharm
+# Edit at https://www.gitignore.io/?templates=python,pycharm
+
+### local linting
+FIXME
+FIXME-2
+
 ### PyCharm ###
 .idea/
 
-### Visual Studio local settings ###
+### Visual Studio ###
 .vscode/
 
 .local/
 
-### Jupyter ###
-.ipynb_checkpoints/
-# pyenv
-.python-version
-
-### Apple muck ###
-.DS_Store
-
-# Environments
-.env
-.venv
-# env/ # duplicated
-venv/
-ENV/
-env.bak/
-venv.bak/
-
+### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
-*.py[cdo]
+*$py.class
 
 # C extensions
 *.so
 
 # Distribution / packaging
 .Python
-env/
 build/
 develop-eggs/
 dist/
@@ -45,9 +35,13 @@ lib64/
 parts/
 sdist/
 var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -62,27 +56,79 @@ pip-delete-this-directory.txt
 # Unit test / coverage reports
 htmlcov/
 .tox/
+.nox/
 .coverage
 .coverage.*
 .cache
 nosetests.xml
 coverage.xml
-*,cover
-
-# Local tests
-test.py
-test.txt
-api_out.log
+*.cover
+.hypothesis/
+.pytest_cache/
 
 # Translations
 *.mo
-*.pot
 
 # Django stuff:
 *.log
+*.pot
+
+# Scrapy stuff:
+.scrapy
 
 # Sphinx documentation
 docs/_build/
 
 # PyBuilder
 target/
+
+# pyenv
+.python-version
+
+# pipenv
+#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+#   However, in case of collaboration, if having platform-specific dependencies or dependencies
+#   having no cross-platform support, pipenv may install dependencies that don't work, or not
+#   install all needed dependencies.
+#Pipfile.lock
+
+# celery beat schedule file
+celerybeat-schedule
+
+# SageMath parsed files
+*.sage.py
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# End of https://www.gitignore.io/api/python,pycharm
+.DS_Store
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
