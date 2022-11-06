@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+empty(){
+    rm FIXME
+    echo "No errors found"
+}
+
+find . -type f -name "*.py" -print0 | xargs -0 pylint --rcfile .pylintrc --errors-only > FIXME
+
+[ -s FIXME ] || empty
