@@ -43,7 +43,7 @@ def demo(ip: str):
 
     # client.ver returns a string
     print(f"\nNUT driver version: {client.ver()}")
-    print(f"Scanning for UPSes...")
+    print("Scanning for UPSes...")
     ups_dict = client.get_dict_ups()
     for ups_id, desc in ups_dict.items():
         print(f"'{desc}' is called with id '{ups_id}'")
