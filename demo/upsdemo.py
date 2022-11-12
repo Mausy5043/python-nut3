@@ -30,6 +30,7 @@ sys.path.append(nut3_dir)
 from pynut3 import nut3  # noqa
 
 
+# pylint: disable=invalid-name
 def demo(ip: str):
     """Perform the demonstration.
 
