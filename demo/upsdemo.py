@@ -26,6 +26,7 @@ import sys
 nut3_dir = (os.path.abspath(os.path.join(os.path.dirname(__file__), '..')) + '/src/')
 sys.path.append(nut3_dir)
 
+# pylint: disable=wrong-import-position
 from pynut3 import nut3  # noqa
 
 
