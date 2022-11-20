@@ -10,7 +10,7 @@ name = "pynut3"
 version = "0.4.0"
 dependencies = []
 authors = [
-  { name="Mausy5043", email="mausy5043@example.com" },
+  { name="Mausy5043" },
 ]
 description = "A Python3 abstraction class to access NUT servers for uninterruptible power supplies (UPS)."
 readme = "README.md"
