@@ -16,9 +16,11 @@ description = "A Python3 abstraction class to access NUT servers for uninterrupt
 readme = "README.md"
 requires-python = ">=3.7"
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: GNU Public License v3",
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: System :: Power (UPS)"
 ]
 
 [project.urls]
