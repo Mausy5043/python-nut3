@@ -23,7 +23,7 @@ import argparse
 import os
 import sys
 
-nut3_dir = (os.path.abspath(os.path.join(os.path.dirname(__file__), '..')) + '/src/')
+nut3_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..")) + "/src/"
 sys.path.append(nut3_dir)
 
 # pylint: disable=wrong-import-position
@@ -83,11 +83,12 @@ def demo(ip: str):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Execute a demo of the package.")
-    parser.add_argument("--host",
-                        type=str,
-                        required=True,
-                        help="IP-address or hostname of the UPS-server"
-                        )
+    parser.add_argument(
+        "--host",
+        type=str,
+        required=True,
+        help="IP-address or hostname of the UPS-server",
+    )
     OPTION = parser.parse_args()
 
     demo(OPTION.host)
