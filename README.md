@@ -1,7 +1,12 @@
-[![PyPI](https://img.shields.io/pypi/v/pynut3.svg)](https://pypi.python.org/pypi/pynut3)
+# pynut3 
+#### (aka python-nut3)
 
-python-nut3
-===========
+
+[![PyPI version](https://img.shields.io/pypi/v/pynut3.svg?logo=pypi&logoColor=FFE873)](https://pypi.org/project/pynut3)
+[![Supported Python versions](https://img.shields.io/pypi/pyversions/pynut3.svg?logo=python&logoColor=FFE873)](https://pypi.org/project/pynut3)
+[![PyPI downloads](https://img.shields.io/pypi/dm/pynut3.svg)](https://pypistats.org/packages/pynut3)
+[![Code style: Black](https://img.shields.io/badge/code%20style-Black-000000.svg)](https://github.com/psf/black)
+
 
 This is a Python3 library to allow communication with NUT ([Network UPS Tools](http://www.networkupstools.org/))
 Uninterruptible Power Supply servers.
