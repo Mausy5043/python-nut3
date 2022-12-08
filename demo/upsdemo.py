@@ -45,6 +45,7 @@ def demo(ip: str):
     # client.ver returns a string
     print(f"\nNUT driver version: {client.ver()}")
     print("Scanning for UPSes...")
+    # client.get_dict_ups returns a dict
     ups_dict = client.get_dict_ups()
     for ups_id, desc in ups_dict.items():
         print(f"'{desc}' is called with id '{ups_id}'")
@@ -52,10 +53,10 @@ def demo(ip: str):
         # client.description returns a string
         print(f"\nclient.description({ups_id}) returns: {client.description(ups_id)}")
 
-        # client.num_login returns the numer of users logge into the UPS
+        # client.num_login returns the number of users logged into the UPS
         print(f"Number of users : {client.num_logins(ups_id)}")
 
-        # client.list_commands returns a dict
+        # client.get_dict_clients returns a dict of clients.
         try:
             clnts_dict = client.get_dict_clients(ups_id)
             print(f"\nUPS '{ups_id}' has the following clients connected")
@@ -64,7 +65,7 @@ def demo(ip: str):
         except nut3.PyNUT3Error:
             print(f"\n** UPS '{ups_id}' does not support listing it's clients")
 
-        # client.list_vars returns a dict
+        # client.get_dict_vars returns a dict
         vars_dict = client.get_dict_vars(ups_id)
         rw_vars_dict = client.get_dict_rw_vars(ups_id)
         print(f"\nUPS '{ups_id}' has the following variables available:")
@@ -74,7 +75,7 @@ def demo(ip: str):
                 rw_ro = "  (rw)"
             print(f"{rw_ro} {var:<36}: {value}")
 
-        # client.list_commands returns a dict
+        # client.get_dict_commands returns a dict
         cmds_dict = client.get_dict_commands(ups_id)
         print(f"\nUPS '{ups_id}' has the following commands available")
         for var, value in cmds_dict.items():
@@ -84,11 +85,11 @@ def demo(ip: str):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Execute a demo of the package.")
     parser.add_argument(
-        "--host",
+        "--server",
         type=str,
         required=True,
         help="IP-address or hostname of the UPS-server",
     )
     OPTION = parser.parse_args()
 
-    demo(OPTION.host)
+    demo(OPTION.server)
