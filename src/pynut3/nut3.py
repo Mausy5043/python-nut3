@@ -28,10 +28,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 import logging
 import socket
 
+# TODO: implement telnetlib3 to replace deprecated telnetlib (PEP-594)
 from telnetlib import Telnet
 from typing import Any, Dict, List, Optional
 
-__version__ = "1.2.1"
+__version__ = "1.2.4"
 __all__ = ["PyNUT3Error", "PyNUT3Client"]
 
 _LOGGER = logging.getLogger(__name__)
