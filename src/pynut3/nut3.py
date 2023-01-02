@@ -32,7 +32,7 @@ import socket
 from telnetlib import Telnet
 from typing import Any, Dict, List, Optional
 
-__version__ = "1.2.4"
+__version__ = "1.2.5"
 __all__ = ["PyNUT3Error", "PyNUT3Client"]
 
 _LOGGER = logging.getLogger(__name__)
@@ -194,7 +194,7 @@ class PyNUT3Client:
         line: str
         for line in result.split("\n"):
             if line.startswith("UPS"):
-                line = line[len("UPS "):-len('"')]
+                line = line[len("UPS ") : -len('"')]
                 if '"' not in line:
                     continue
                 ups: str
@@ -315,8 +315,8 @@ class PyNUT3Client:
         clients: Dict[str, List[str]] = {}
         line: str
         for line in result.split("\n"):
-            if line.startswith("CLIENT") and " " in line[len("CLIENT "):]:
-                line = line[len("CLIENT "):]
+            if line.startswith("CLIENT") and " " in line[len("CLIENT ") :]:
+                line = line[len("CLIENT ") :]
                 if " " not in line:
                     continue
                 host: str
