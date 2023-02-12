@@ -71,9 +71,7 @@ class PyNUT3Client:
         debug       : Boolean, put class in debug mode (prints everything
                         on console, defaults to False).
         """
-        _LOGGER.debug(
-            f"NUT Class initialization, Host/Port: {host}:{port}, Login: {login}"
-        )
+        _LOGGER.debug(f"NUT Class initialization, Host/Port: {host}:{port}, Login: {login}")
 
         self._debug = debug
         self._host: str = host
@@ -137,9 +135,7 @@ class PyNUT3Client:
         try:
             if self._srv_handler is None:
                 raise RuntimeError("NUT3 connection has not been opened.")
-            return self._srv_handler.read_until(
-                string.encode("ascii"), self._timeout
-            ).decode()
+            return self._srv_handler.read_until(string.encode("ascii"), self._timeout).decode()
         except (EOFError, BrokenPipeError):
             _LOGGER.error("NUT3 problem reading from server.")
             return ""
@@ -388,11 +384,7 @@ class PyNUT3Client:
             self._disconnect()
 
         try:
-            return [
-                c[offset:].split('"')[1].strip()
-                for c in result[:end_offset].split("\n")
-                if '"' in c[offset:]
-            ]
+            return [c[offset:].split('"')[1].strip() for c in result[:end_offset].split("\n") if '"' in c[offset:]]
         except IndexError as exc:
             raise PyNUT3Error(result.replace("\n", "")) from exc
 
@@ -419,11 +411,7 @@ class PyNUT3Client:
             self._disconnect()
 
         try:
-            return [
-                c[offset:].split('"')[1].strip()
-                for c in result[:end_offset].split("\n")
-                if '"' in c[offset:]
-            ]
+            return [c[offset:].split('"')[1].strip() for c in result[:end_offset].split("\n") if '"' in c[offset:]]
         except IndexError as exc:
             raise PyNUT3Error(result.replace("\n", "")) from exc
 
@@ -512,9 +500,7 @@ class PyNUT3Client:
 
     def command_description(self, ups: str, command: str) -> str:
         """Get a command's description."""
-        _LOGGER.debug(
-            f"NUT3 requesting command_description '{command}' on '{self._host}'."
-        )
+        _LOGGER.debug(f"NUT3 requesting command_description '{command}' on '{self._host}'.")
 
         if not self._persistent:
             self._connect()
