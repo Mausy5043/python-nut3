@@ -19,8 +19,9 @@ endorsed by the [Network UPS Tools developers](https://github.com/networkupstool
 The module itself requires only Python3 (Python2 may work but is nolonger supported).
 
 ## Installation
-
-    pip install pynut3
+```bash
+pip install pynut3
+```
 
 ## Usage
 
