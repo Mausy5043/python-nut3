@@ -384,7 +384,11 @@ class PyNUT3Client:
             self._disconnect()
 
         try:
-            return [c[offset:].split('"')[1].strip() for c in result[:end_offset].split("\n") if '"' in c[offset:]]
+            return [
+                c[offset:].split('"')[1].strip()
+                for c in result[:end_offset].split("\n")
+                if '"' in c[offset:]
+            ]
         except IndexError as exc:
             raise PyNUT3Error(result.replace("\n", "")) from exc
 
@@ -411,7 +415,11 @@ class PyNUT3Client:
             self._disconnect()
 
         try:
-            return [c[offset:].split('"')[1].strip() for c in result[:end_offset].split("\n") if '"' in c[offset:]]
+            return [
+                c[offset:].split('"')[1].strip()
+                for c in result[:end_offset].split("\n")
+                if '"' in c[offset:]
+            ]
         except IndexError as exc:
             raise PyNUT3Error(result.replace("\n", "")) from exc
 
