@@ -9,7 +9,7 @@
 Copyright (C) 2013 george2
 
 Modifications by mezz64 - 2016
-Modifications by Mausy5043 - 2022
+Modifications by Mausy5043 - 2023
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ import socket
 from telnetlib import Telnet
 from typing import Any, Dict, List, Optional
 
-__version__ = "1.2.5"
+__version__ = "1.4.1"
 __all__ = ["PyNUT3Error", "PyNUT3Client"]
 
 _LOGGER = logging.getLogger(__name__)
