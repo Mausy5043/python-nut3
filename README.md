@@ -16,7 +16,8 @@ endorsed by the [Network UPS Tools developers](https://github.com/networkupstool
 
 ## Requirements
 
-The module itself requires only Python3 (Python2 may work but is nolonger supported).
+The module itself requires only Python3. Python2 and all Python3 versions that have past their end-of-life date may still work but are nolonger supported.  
+
 
 ## Installation
 ```bash
@@ -39,7 +40,7 @@ for k1, v1 in ups_dict.items():
         print(f"{k2}\t:\t{v2}")
 ```
 
-Please note that this module has completely and intentionally broken backwards compatibility with previous versions of PyNUT.
+Please note that this module has completely and intentionally broken backwards compatibility with (previous) versions of PyNUT.
 
 ## Acknowledgements
 
