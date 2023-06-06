@@ -48,7 +48,7 @@ Based on various NUT Client related Python scripts, written by David Goncalves a
 Later overhauled by rshipp with Python3 modifications by hordurk, george2 and mezz64.
 Others will have contributed along the way. I was not able to reliably find their names.
 
-Further updates in this fork are by me (Mausy5043) based/inspired on prior work from timurlenk07, StSAV012, rshipp & Rojer-X86
+Further updates in this fork are by me (Mausy5043) and based/inspired on prior work from timurlenk07, StSAV012, rshipp & Rojer-X86
 
 ## License
 
