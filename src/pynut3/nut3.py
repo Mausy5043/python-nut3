@@ -28,7 +28,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 import logging
 import socket
 
-# TODO: implement telnetlib3 to replace deprecated telnetlib (PEP-594)
+# TODO: implement pexpect to replace deprecated telnetlib (PEP-594)
+# ref:
+#   https://stackoverflow.com/questions/75778543/python-telnetlib3-examples
+#   https://pexpect.readthedocs.io/en/stable/index.html
+
 from telnetlib import Telnet
 from typing import Any, Dict, List, Optional
 
