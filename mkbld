@@ -52,8 +52,6 @@ update_local_repo() {
     git pull || exit 1
 }
 
-"${HERE}"/check
-
 # check commandline parameters
 case $CMD in
     -b | --build)
