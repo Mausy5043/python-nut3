@@ -32,8 +32,6 @@ import socket
 from telnetlib import Telnet
 from typing import Any, Dict, List, Optional
 
-__version__ = "1.4.1"
-__all__ = ["PyNUT3Error", "PyNUT3Client"]
 
 _LOGGER = logging.getLogger(__name__)
 
