@@ -31,17 +31,16 @@ test_app() {
     python3 -m twine upload --repository testpypi dist/*
     echo ""
     echo "To test installing this package use:"
-    echo "python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps ${PACKAGE_NAME}"
+    echo "python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps --upgrade ${PACKAGE_NAME}"
 }
 
 dist_app() {
     LOCATION=$1
     echo "Upload distribution package to PyPi from $LOCATION"
-    # throw away files if upload was succesful
-    python3 -m twine upload --repository pypi dist/*   # && rm dist/*
+    python3 -m twine upload --repository pypi dist/*
     echo ""
     echo "To install this package use:"
-    echo "python3 -m pip install ${PACKAGE_NAME}"
+    echo "python3 -m pip install --upgrade ${PACKAGE_NAME}"
 }
 
 update_local_repo() {
@@ -72,7 +71,7 @@ case $CMD in
         ;;
     *)
         echo "Syntax:"
-        echo "build [-b|--build] | [-d|--dist] | [-t|--test] | [--discard]"
+        echo "mkbld [-b|--build] | [-d|--dist] | [-t|--test] | [--discard]"
         echo "Only the first option past is executed!"
         echo
         exit 1
