@@ -192,7 +192,7 @@ class PyNUT3Client:
         line: str
         for line in result.split("\n"):
             if line.startswith("UPS"):
-                line = line[len("UPS ") : -len('"')]
+                line = line[len("UPS "):-len('"')]
                 if '"' not in line:
                     continue
                 ups: str
@@ -313,8 +313,8 @@ class PyNUT3Client:
         clients: Dict[str, List[str]] = {}
         line: str
         for line in result.split("\n"):
-            if line.startswith("CLIENT") and " " in line[len("CLIENT ") :]:
-                line = line[len("CLIENT ") :]
+            if line.startswith("CLIENT") and " " in line[len("CLIENT "):]:
+                line = line[len("CLIENT "):]
                 if " " not in line:
                     continue
                 host: str
@@ -502,6 +502,7 @@ class PyNUT3Client:
         try:
             type_: str = " ".join(result.split(" ")[3:]).strip()
             # Ensure the response was valid.
+            # FIXME: shouldn't use assert in production code
             assert len(type_) > 0
             assert result.startswith("TYPE")
             return type_
