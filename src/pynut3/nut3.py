@@ -591,11 +591,12 @@ class PyNUT3Client:
             self._connect()
 
         self._write("HELP\n")
+        result: str = self._read_until("\n")
 
         if not self._persistent:
             self._disconnect()
 
-        return self._read_until("\n")
+        return result
 
     def ver(self) -> str:
         """Send VER command."""
@@ -605,8 +606,9 @@ class PyNUT3Client:
             self._connect()
 
         self._write("VER\n")
+        result: str = self._read_until("\n")
 
         if not self._persistent:
             self._disconnect()
 
-        return self._read_until("\n")
+        return result
