@@ -503,9 +503,9 @@ class PyNUT3Client:
         result_ = result.replace("\n", "")
         # Ensure the response was valid.
         if len(type_) == 0:
-            raise PyNUT3Error(f'No TYPE returned: {result_}')
+            raise PyNUT3Error(f"No TYPE returned: {result_}")
         if not result.startswith("TYPE"):
-            raise PyNUT3Error(f'Unexpected response: {result_}')
+            raise PyNUT3Error(f"Unexpected response: {result_}")
 
         return type_
 
