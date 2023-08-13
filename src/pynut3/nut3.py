@@ -453,7 +453,7 @@ class PyNUT3Client:
             self._connect()
 
         self._write(f"GET VAR {ups} {var}\n")
-        result = self._read_until("\n")
+        result: str = self._read_until("\n")
 
         if not self._persistent:
             self._disconnect()
@@ -476,7 +476,7 @@ class PyNUT3Client:
             self._connect()
 
         self._write(f"GET DESC {ups} {var}\n")
-        result = self._read_until("\n")
+        result: str = self._read_until("\n")
 
         if not self._persistent:
             self._disconnect()
@@ -556,7 +556,7 @@ class PyNUT3Client:
 
         _LOGGER.debug("FSD called...")
         self._write(f"FSD {ups}\n")
-        result = self._read_until("\n")
+        result: str = self._read_until("\n")
         if result != "OK FSD-SET\n":
             raise PyNUT3Error(result.replace("\n", ""))
 
