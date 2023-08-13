@@ -502,7 +502,7 @@ class PyNUT3Client:
         try:
             type_: str = " ".join(result.split(" ")[3:]).strip()
             # Ensure the response was valid.
-            # FIXME: shouldn't use assert in production code
+            # FIXME: shouldn't use assert in production code (bandit B101)
             assert len(type_) > 0
             assert result.startswith("TYPE")
             return type_
