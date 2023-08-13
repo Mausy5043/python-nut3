@@ -499,15 +499,15 @@ class PyNUT3Client:
         if not self._persistent:
             self._disconnect()
 
-        try:
-            type_: str = " ".join(result.split(" ")[3:]).strip()
-            # Ensure the response was valid.
-            # FIXME: shouldn't use assert in production code (bandit B101)
-            assert len(type_) > 0
-            assert result.startswith("TYPE")
-            return type_
-        except AssertionError as exc:
-            raise PyNUT3Error(result.replace("\n", "")) from exc
+        type_: str = " ".join(result.split(" ")[3:]).strip()
+        result_ = result.replace("\n", "")
+        # Ensure the response was valid.
+        if len(type_) == 0:
+            raise PyNUT3Error(f'No TYPE returned: {result_}')
+        if not result.startswith("TYPE"):
+            raise PyNUT3Error(f'Unexpected response: {result_}')
+
+        return type_
 
     def command_description(self, ups: str, command: str) -> str:
         """Get a command's description."""
