@@ -1,8 +1,13 @@
 [MAIN]
+
 # Analyse import fallback blocks. This can be used to support both Python 2 and
 # 3 compatible code, which means that the block might have code that exists
 # only in one or another interpreter, leading to false positives when analysed.
 analyse-fallback-blocks=no
+
+# Clear in-memory caches upon conclusion of linting. Useful if running pylint
+# in a server-like mode.
+clear-cache-post-run=no
 
 # Load and enable all available extensions. Use --list-extensions to see a list
 # all available extensions.
@@ -35,7 +40,7 @@ extension-pkg-whitelist=_mysql,
 fail-on=
 
 # Specify a score threshold under which the program will exit with error.
-fail-under=10
+fail-under=10.0
 
 # Interpret the stdin as a python script, whose filename needs to be passed as
 # the module_or_package argument.
@@ -46,8 +51,8 @@ ignore=CVS
 
 # Add files or directories matching the regular expressions patterns to the
 # ignore-list. The regex matches against paths and can be in Posix or Windows
-# format. Because '\' represents the directory delimiter on Windows systems, it
-# can't be used as an escape character.
+# format. Because '\\' represents the directory delimiter on Windows systems,
+# it can't be used as an escape character.
 ignore-paths=
 
 # Files or directories matching the regular expression patterns are skipped.
@@ -88,6 +93,12 @@ py-version=3.9
 
 # Discover python modules and packages in the file system subtree.
 recursive=no
+
+# Add paths to the list of the source roots. Supports globbing patterns. The
+# source root is an absolute path or a path relative to the current working
+# directory used to determine a package namespace for modules located under the
+# source root.
+source-roots=
 
 # When enabled, pylint would attempt to guess common misconfiguration and emit
 # user-friendly hints instead of false-positive error messages.
@@ -175,10 +186,18 @@ function-naming-style=snake_case
 #function-rgx=
 
 # Good variable names which should always be accepted, separated by a comma.
-good-names=i,
+good-names=c,
+           d,
+           df,
+           dt,
+           e,
+           ex,
+           i,
            j,
            k,
-           ex,
+           l,
+           t0,
+           ts,
            OPTION,
            Run,
            _
@@ -224,6 +243,10 @@ no-docstring-rgx=^_
 # to this list to register other decorators that produce valid properties.
 # These decorators are taken in consideration only for invalid-name.
 property-classes=abc.abstractproperty
+
+# Regular expression matching correct type alias names. If left empty, type
+# alias names will be checked with the set naming style.
+#typealias-rgx=
 
 # Regular expression matching correct type variable names. If left empty, type
 # variable names will be checked with the set naming style.
@@ -308,8 +331,8 @@ min-public-methods=2
 [EXCEPTIONS]
 
 # Exceptions that will emit a warning when caught.
-overgeneral-exceptions=BaseException,
-                       Exception
+overgeneral-exceptions=builtins.BaseException,
+                       builtins.Exception
 
 
 [FORMAT]
@@ -347,6 +370,9 @@ single-line-if-stmt=no
 # List of modules that can be imported at any level, not just the top level
 # one.
 allow-any-import-level=
+
+# Allow explicit reexports by alias from a package __init__.
+allow-reexport-from-package=no
 
 # Allow wildcard imports from modules that define __all__.
 allow-wildcard-with-all=no
@@ -414,11 +440,19 @@ disable=raw-checker-failed,
         locally-disabled,
         file-ignored,
         suppressed-message,
+        useless-suppression,
         deprecated-pragma,
         use-symbolic-message-instead,
+        use-implicit-booleaness-not-comparison-to-string,
+        use-implicit-booleaness-not-comparison-to-zero,
         too-many-arguments,
-        logging-fstring-interpolation
-#        useless-suppression,
+        too-many-locals,
+        too-many-branches,
+        logging-fstring-interpolation,
+        import-error,
+        invalid-name,
+        missing-function-docstring,
+        missing-module-docstring
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
@@ -470,8 +504,9 @@ evaluation=max(0, 0 if fatal else 10.0 - ((float(5 * error + warning + refactor 
 # used to format the message information. See doc for all details.
 msg-template=
 
-# Set the output format. Available formats are text, parseable, colorized, json
-# and msvs (visual studio). You can also give a reporter class, e.g.
+# Set the output format. Available formats are: text, parseable, colorized,
+# json2 (improved json format), json (old json format) and msvs (visual
+# studio). You can also give a reporter class, e.g.
 # mypackage.mymodule.MyReporterClass.
 #output-format=
 
@@ -505,8 +540,8 @@ min-similarity-lines=4
 # Limits count of emitted suggestions for spelling mistakes.
 max-spelling-suggestions=4
 
-# Spelling dictionary name. Available dictionaries: none. To make it work,
-# install the 'python-enchant' package.
+# Spelling dictionary name. No available dictionaries : You need to install
+# both the python package and the system dependency for enchant to work.
 spelling-dict=
 
 # List of comma separated words that should be considered directives if they
