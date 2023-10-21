@@ -32,10 +32,10 @@ Assuming you have a UPS which is connected to a host on the network with IP `192
 from pynut3 import nut3
 client = nut3.PyNUT3Client(host='192.168.2.17')
 print(client.help())
-ups_dict = client.list_ups()
+ups_dict = client.get_dict_ups()
 for k1, v1 in ups_dict.items():
     print(f"{v1} is called with id {k1}")
-    vars_dict = client.list_vars(k1)
+    vars_dict = client.get_dict_vars(k1)
     for k2, v2 in vars_dict.items():
         print(f"{k2}\t:\t{v2}")
 ```
