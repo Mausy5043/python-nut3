@@ -565,9 +565,7 @@ class PyNUT3Client:
             self._disconnect()
 
     def num_logins(self, ups: str) -> int:
-        """Send GET NUMLOGINS command to get the number of users logged
-        into a given UPS.
-        """
+        """Send GET NUMLOGINS command to get the number of users logged into a given UPS."""
         _LOGGER.debug(f"NUT3 requesting num_logins called on '{self._host}'")
 
         if not self._persistent:
