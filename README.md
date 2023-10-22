@@ -16,7 +16,7 @@ endorsed by the [Network UPS Tools developers](https://github.com/networkupstool
 
 ## Requirements
 
-The module itself requires only Python3. Python2 and all Python3 versions that have past their end-of-life date may still work but are nolonger supported.  
+Development of this package is done in Python 3.9. The package is considered forwards compatible at least upto Python 3.11 and probably also beyond. Backwards compatibility is not guaranteed; if it works on Python 3.7 or before consider yourself lucky. [Python versions that are end-of-life](https://devguide.python.org/versions/) are not supported.  
 
 
 ## Installation

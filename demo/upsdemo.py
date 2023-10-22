@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""A demonstration of the use of the `python-nut3` package
+"""A demonstration of the use of the `python-nut3` package.
 
 Copyright (c) 2022 Mausy5043
 
