@@ -3,10 +3,10 @@
 ## Versionnumbers
 
 We try to follow [semantic versioning](https://semver.org).
--  We don't have `0` MINOR or PATCH versionnumbers. Patterns `x.0.z` and `x.y.0` do not exist. 
--  Testing versions are identified by odd-numbered MINOR versions
--  Stable/production versions are identified by even-numbered MINOR versions
--  MAJOR versions increase only when significant changes are made 
+-   We don't have `0` MINOR or PATCH versionnumbers. Patterns `x.0.z` and `x.y.0` do not exist. 
+-   Testing versions are identified by odd-numbered MINOR versions
+-   Stable/production versions are identified by even-numbered MINOR versions
+-   MAJOR versions increase only when significant changes are made 
 
 ## Building the package for testing
 
@@ -15,9 +15,9 @@ Preferably changes are done on a separate branch.
 
 1.  Make the necessary changes...
 2.  In `./setup.py` change the versionnumber
-    -  For testing we change the MINOR version to the next **odd** value
-    -  The first PATCH version always starts on x.y.1 and increases by +1 with every new build 
-    -  Builds with the same versionnumber can't be uploaded to PyPi, so it's not like we have a choice
+    -   For testing we change the MINOR version to the next **odd** value
+    -   The first PATCH version always starts on x.y.1 and increases by +1 with every new build 
+    -   Builds with the same versionnumber can't be uploaded to PyPi, so it's not like we have a choice
 3.  Run `./build -b`
 4.  Run `./build -t`  *(installation instructions are displayed on the terminal after the upload)*
 5.  Test the changes by installing the test package on a computer near you. *NOTE: You may have to try twice or wait a couple of minutes for the download to become available from PyPi.*
@@ -30,12 +30,12 @@ Preferably changes are done on a separate branch.
 To distribute a new production version the package must be built and uploaded to [pypi.org](https://pypi.org)
 
 1.  Make the necessary changes...
-    -  Merges from a separate branch are considered MINOR changes
-    -  Fixes etc. may be committed directly to the `master` branch as a new PATCH version
+    -   Merges from a separate branch are considered MINOR changes
+    -   Fixes etc. may be committed directly to the `master` branch as a new PATCH version
 2.  In `./setup.py` change the versionnumber
-    -  For merges we change the MINOR version to the next **even** value
-    -  The first PATCH version always starts on x.y.1 and increases by +1 with every new build
-    -  Builds with the same versionnumber can't be uploaded to PyPi, so it's not like we have a choice
+    -   For merges we change the MINOR version to the next **even** value
+    -   The first PATCH version always starts on x.y.1 and increases by +1 with every new build
+    -   Builds with the same versionnumber can't be uploaded to PyPi, so it's not like we have a choice
 3.  Run `./build -b`
 4.  Run `./build -d`  *(installation instructions are displayed on the terminal after the upload)*
 5.  Test the changes by installing the distribution package on a computer near you. *NOTE: You may have to try twice or wait a couple of minutes for the download to become available from PyPi.*
