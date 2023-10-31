@@ -7,17 +7,17 @@
 
 #### (aka python-nut3)
 
-This is a Python3 library to allow communication with NUT ([Network UPS Tools](http://www.networkupstools.org/))
-Uninterruptible Power Supply servers.
+This is a Python3 library to allow communication with
+NUT ([Network UPS Tools](http://www.networkupstools.org/)) Uninterruptible Power Supply servers.
 
-**Note**: This is an unofficial project, and is in no way supported orendorsed by 
+**Note**: This is an unofficial project, and is in no way supported orendorsed by
 the [Network UPS Tools developers](https://github.com/networkupstools).
 
 ## Requirements
 
 Development of this package is done in Python 3.9. The package is considered forwards compatible
 at least upto Python 3.11 and probably also beyond. Backwards compatibility is not guaranteed; if
-it works on Python 3.7 or before consider yourself lucky.
+it works on Python 3.7 or before consider yourself lucky.  
 [Python versions that are end-of-life](https://devguide.python.org/versions/) are not supported.
 
 ## Installation
@@ -55,7 +55,7 @@ Later overhauled by rshipp with Python3 modifications by hordurk, george2 and me
 Others will have contributed along the way. I was not able to reliably find their names.
 
 Further updates in this fork are by me (Mausy5043) and based/inspired on prior work from
-timurlenk07, StSAV012, rshipp & Rojer-X86
+timurlenk07, StSAV012, rshipp & Rojer-X86.
 
 ## License
 
