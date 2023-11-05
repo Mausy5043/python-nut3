@@ -40,6 +40,9 @@ def demo(ip: str) -> None:
     Returns:
         None
     """
+    var: str
+    value: str
+
     client = nut3.PyNUT3Client(host=ip)
 
     # client.ver returns a string
@@ -60,8 +63,8 @@ def demo(ip: str) -> None:
         try:
             clnts_dict = client.get_dict_clients(ups_id)
             print(f"\nUPS '{ups_id}' has the following clients connected")
-            for var, value in clnts_dict.items():
-                print(f"{var:<36}: {value}")
+            for _var, _value in clnts_dict.items():
+                print(f"{_var:<36}: {_value}")
         except nut3.PyNUT3Error:
             print(f"\n** UPS '{ups_id}' does not support listing it's clients")
 
