@@ -5,4 +5,4 @@
 from .nut3 import PyNUT3Error
 from .nut3 import PyNUT3Client
 
-__all__ = ["PyNUT3Error", "PyNUT3Client"]
+__all__: list[str] = ["PyNUT3Error", "PyNUT3Client"]
