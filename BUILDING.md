@@ -31,9 +31,9 @@ Preferably changes are done on a separate branch.
 To distribute a new production version the package must be built and uploaded to [pypi.org](https://pypi.org)
 
 Start by making the necessary changes on the `devel` branch (see the previous paragraph).
-1.  Merge the pull request from the `devel` branch into the `master` branch.
+1.  Merge the pull request from the `devel` branch into the `latest` branch.
     -   Merges from a separate branch are considered MINOR changes, unless they break existing functionality.
-    -   Fixes etc. may be committed directly to the `master` branch as a new PATCH version.
+    -   Fixes etc. may be committed directly to the `latest` branch as a new PATCH version.
 2.  In `pyproject.toml` change the versionnumber.
     -   For merges we change the MINOR version to the next **even** value.
     -   The first PATCH version always starts on x.y.1 and increases by +1 with every new build.
@@ -41,5 +41,5 @@ Start by making the necessary changes on the `devel` branch (see the previous pa
 3.  Run `./build -b`
 4.  Run `./build -d`  *(installation instructions are displayed on the terminal after the upload)*
 5.  Verify the changes by installing the distribution package on a computer near you. *NOTE: You may have to try twice or wait a couple of minutes for the download to become available from PyPi*.
-6.  After succesfull testing of the distribution package create a new tag on the `master` branch.
-7.  Create a pull request from `master` into `devel` to synchronise both branches.
+6.  After succesfull testing of the distribution package create a new tag on the `latest` branch.
+7.  Create a pull request from `latest` into `devel` to synchronise both branches.
