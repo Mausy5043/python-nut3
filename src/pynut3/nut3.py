@@ -208,7 +208,7 @@ class PyNUT3Client:
     def get_dict_vars(self, ups: str) -> Dict[str, str]:
         """Get all available vars from the specified UPS.
 
-        The result is a dictionary containing 'key->val' pairs of all
+        The result is a dictionary containing 'key: val' pairs of all
         available vars.
         """
         _LOGGER.debug(f"NUT3 requesting list_vars from server {self._host}")
@@ -557,7 +557,7 @@ class PyNUT3Client:
 
         _LOGGER.debug("FSD called...")
         self._write(f"FSD {ups}\n")
-        result: str = self._read_until("\n")
+        result = self._read_until("\n")
         if result != "OK FSD-SET\n":
             raise PyNUT3Error(result.replace("\n", ""))
 
