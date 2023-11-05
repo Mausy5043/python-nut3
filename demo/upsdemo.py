@@ -31,7 +31,7 @@ from pynut3 import nut3  # noqa
 
 
 # pylint: disable=invalid-name
-def demo(ip: str):
+def demo(ip: str)-> None:
     """Perform the demonstration.
 
     Args:
