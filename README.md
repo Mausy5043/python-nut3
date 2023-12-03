@@ -22,8 +22,14 @@ it works on Python 3.7 or before consider yourself lucky.
 
 ## Installation
 
+`pynut3` requires telnet to be installed. If it is not available on your system you'll need to install it first.
 ```bash
-pip install pynut3
+sudo apt install telnet
+```
+
+Then install using:
+```bash
+python -m pip install pynut3
 ```
 
 ## Usage
@@ -50,7 +56,7 @@ with (previous) versions of PyNUT.
 ## Acknowledgements
 
 Based on various NUT Client related Python scripts, written by David Goncalves
-as [PyNUT](https://github.com/networkupstools/nut/tree/master/scripts/python), and released under GPL v3.  
+as [PyNUT](https://github.com/networkupstools/nut/tree/master/scripts/python), and released under GPL v3.
 Later overhauled by rshipp with Python3 modifications by hordurk, george2 and mezz64.
 Others will have contributed along the way. I was not able to reliably find their names.
 
