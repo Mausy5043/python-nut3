@@ -10,7 +10,9 @@ name = "pynut3"
 description = "A Python3 abstraction class to access NUT servers for uninterruptible power supplies (UPS)."
 # version = "1.6.2" # latest production version
 version = "1.7.5" # latest testing version
-dependencies = []
+dependencies = [
+    "pexpect",
+]
 license = "GPL-3.0-only"
 authors = [
   { name="Mausy5043" },
