@@ -26,14 +26,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
 import logging
-import socket
-
-# TODO: implement pexpect to replace deprecated telnetlib (PEP-594)
-# ref:
-#   https://stackoverflow.com/questions/75778543/python-telnetlib3-examples
-#   https://pexpect.readthedocs.io/en/stable/index.html
-
-from telnetlib import Telnet
+import pexpect
 from typing import Any, Dict, List, Optional
 
 
@@ -82,74 +75,65 @@ class PyNUT3Client:
         self._password: Optional[str] = password
         self._timeout: float = timeout
         self._persistent: bool = persistent
-        self._srv_handler: Optional[Telnet] = None
+        self._srv_handler: Optional[pexpect.spawn] = None
 
         if self._persistent:
             self._connect()
-
-    def __del__(self) -> None:
-        """Try to disconnect cleanly when class is deleted."""
-        _LOGGER.debug("NUT Class deleted, trying to disconnect.")
-        self._disconnect()
 
     def __enter__(self) -> "PyNUT3Client":
         return self
 
     def __exit__(self, exc_t: type, exc_v: IndexError, trace: Any) -> None:
-        self.__del__()
+        self._disconnect()
 
     def _disconnect(self) -> None:
         """Disconnects from the defined server."""
         if self._srv_handler:
             try:
-                self._write("LOGOUT\n")
+                self._srv_handler.sendline("LOGOUT")
                 self._srv_handler.close()
-            except (socket.error, AttributeError):
-                # The socket is already disconnected.
+            except pexpect.ExceptionPexpect:
                 pass
 
     def _connect(self) -> None:
-        """Connects to the defined server.
-
-        If login/pass was specified, the class tries to authenticate.
-        An error is raised if something goes wrong.
-        """
+        """Connects to the defined server."""
         try:
-            self._srv_handler = Telnet(self._host, self._port, timeout=self._timeout)
+            self._srv_handler = pexpect.spawn(f"telnet {self._host} {self._port}")
+            self._authenticate()
+        except pexpect.ExceptionPexpect as exc:
+            raise PyNUT3Error(f"Error connecting to server: {exc}")
 
-            result: str
-            if self._login is not None:
-                self._write(f"USERNAME {self._login}\n")
-                result = self._read_until("\n")
-                if result != "OK\n":
-                    raise PyNUT3Error(result.replace("\n", ""))
+    def _authenticate(self) -> None:
+        """Authenticate to the server if login and password are provided."""
+        if self._login is not None:
+            self._srv_handler.expect("USERNAME")
+            self._srv_handler.sendline(self._login)
 
-            if self._password is not None:
-                self._write(f"PASSWORD {self._password}\n")
-                result = self._read_until("\n")
-                if result != "OK\n":
-                    raise PyNUT3Error(result.replace("\n", ""))
-        except socket.error as exc:
-            raise PyNUT3Error("Socket error.") from exc
+        if self._password is not None:
+            self._srv_handler.expect("PASSWORD")
+            self._srv_handler.sendline(self._password)
+
+        self._srv_handler.expect("")
+        self._srv_handler.sendline("")  # Sending an empty line to ensure we get to the command prompt
 
     def _read_until(self, string: str) -> str:
-        """Wrapper for _srv_handler read_until method."""
+        """Wrapper for _srv_handler expect method."""
         try:
             if self._srv_handler is None:
                 raise RuntimeError("NUT3 connection has not been opened.")
-            return self._srv_handler.read_until(string.encode("ascii"), self._timeout).decode()
-        except (EOFError, BrokenPipeError):
-            _LOGGER.error("NUT3 problem reading from server.")
+            self._srv_handler.expect_exact(string)
+            return self._srv_handler.before.decode()
+        except pexpect.TIMEOUT:
+            _LOGGER.error(f"NUT3 Timeout while waiting for: {string}")
             return ""
 
     def _write(self, string: str) -> None:
-        """Wrapper for _srv_handler write method."""
+        """Wrapper for _srv_handler sendline method."""
         try:
             if self._srv_handler is None:
                 raise RuntimeError("NUT3 connection has not been opened.")
-            self._srv_handler.write(string.encode("ascii"))
-            return
-        except (EOFError, BrokenPipeError):
+            self._srv_handler.sendline(string)
+        except pexpect.ExceptionPexpect:
             _LOGGER.error("NUT3 problem writing to server.")
 
     def description(self, ups: str) -> str:
@@ -611,3 +595,14 @@ class PyNUT3Client:
             self._disconnect()
 
         return result
+
+
+if __name__ == "__main__":
+    client = PyNUT3Client(host='192.168.2.17')
+    print(client.help())
+    ups_dict = client.get_dict_ups()
+    for k1, v1 in ups_dict.items():
+        print(f"{v1} is called with id {k1}")
+        vars_dict = client.get_dict_vars(k1)
+        for k2, v2 in vars_dict.items():
+            print(f"{k2}\t:\t{v2}")
