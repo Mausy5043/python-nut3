@@ -155,6 +155,13 @@ class PyNUT3Client:
 
     def _read(self, timeout=TIMEOUT) -> list[str]:
         """Collect the output from the server.
+
+        Args:
+            timeout: timeout to use in seconds
+
+        Returns:
+            output from the server as a list of strings.
+        """
         _lines: list[str] = []
         if not self._child:
             raise RuntimeError("NUT3 connection has not been opened.")
@@ -180,7 +187,7 @@ class PyNUT3Client:
             _LOGGER.error("NUT3 problem writing to server.")
 
     def cmd(self, command:str) -> list[str]:
-        """Execute a command and return anything that gets returned.
+        """Execute a valid supported command and return anything that gets returned.
 
         Args:
             command: command to be sent
