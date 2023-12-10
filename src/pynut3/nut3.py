@@ -111,6 +111,7 @@ class PyNUT3Client:
                 self._srv_handler.sendline("LOGOUT")
                 self._srv_handler.close()
             except pexpect.ExceptionPexpect:
+                # the connection was already closed
                 pass
 
     def _connect(self) -> None:
