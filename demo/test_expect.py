@@ -38,7 +38,7 @@ def wait_for_output(child_process, timeout=5) -> list[str]:
     while True:
         try:
             child_process.expect([pexpect.EOF, '\n'], timeout)
-            lines.append(f"[{lineno}] {child.before.decode('utf-8')}")
+            lines.append(f"[{lineno}] {child_process.before.decode('utf-8')}")
         except pexpect.exceptions.TIMEOUT:
             break
         lineno += 1
