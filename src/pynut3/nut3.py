@@ -172,6 +172,29 @@ class PyNUT3Client:
         except (pexpect.ExceptionPexpect, EOFError, BrokenPipeError):
             _LOGGER.error("NUT3 problem writing to server.")
 
+    def cmd(self, command:str) -> list[str]:
+        """Execute a command and return anything that gets returned.
+
+        Args:
+            command: command to be sent
+
+        Returns:
+            sanitized output from command
+        """
+        _LOGGER.debug(f"NUT3 {command} called on '{self._host}'")
+
+        if not self._persistent:
+            self._connect()
+
+        self._write(command)
+        _returned_list: list[str] = self._read()
+
+        if not self._persistent:
+            self._disconnect()
+
+        _mod_list = [_s.replace('\r', '') for _s in _returned_list]
+        return _mod_list
+
     def description(self, ups: str) -> str:
         """Returns the description for a given UPS."""
         _LOGGER.debug(f"NUT3 requesting description from server {self._host}")
