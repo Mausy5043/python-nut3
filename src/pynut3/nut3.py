@@ -29,8 +29,15 @@ import logging
 import pexpect
 from typing import Any, Dict, List, Optional
 
-
-_LOGGER = logging.getLogger(__name__)
+# configure the logging module
+_facility=logging.handlers.SysLogHandler.LOG_DAEMON
+_handlers= [logging.handlers.SysLogHandler(address=_SYSLOG_DEV, facility=_facility)]
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(module)s.%(funcName)s [%(levelname)s] - %(message)s",
+    handlers=_handlers
+)
+_LOGGER: logging.Logger = logging.getLogger(__name__)
 
 
 class PyNUT3Error(Exception):
