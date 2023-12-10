@@ -45,7 +45,7 @@ def wait_for_output(child_process, timeout=5) -> list[str]:
     return lines
 
 # Create a Telnet child process
-with pexpect.spawn(f'{shl_cmd} {host} {port}', timeout=5) as child:
+with pexpect.spawn(f'{shl_cmd} {host} {port}', timeout=5, echo=False) as child:
 
     # Send a newline character (assuming no login is required)
     child.sendline('')
