@@ -105,7 +105,7 @@ class PyNUT3Client:
         self._disconnect()
 
     def _disconnect(self) -> None:
-        """Disconnects from the defined server."""
+        """Disconnect from the server."""
         if self._srv_handler:
             try:
                 self._srv_handler.sendline("LOGOUT")
