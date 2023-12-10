@@ -151,7 +151,7 @@ class PyNUT3Client:
         except Exception as exc:
             raise PyNUT3Error("Something went wrong!") from exc
 
-    def _read(self, timeout=TIMEOUT) -> list[str]:
+    def _read(self, timeout: float =TIMEOUT) -> list[str]:
         """Collect the output from the server.
 
         Args:
