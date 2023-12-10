@@ -148,10 +148,12 @@ class PyNUT3Client:
         except Exception as exc:
             raise PyNUT3Error("Something went wrong!") from exc
 
-    def _read(self, timeout=5) -> list[str]:
+    def _read(self, timeout=None) -> list[str]:
         """Wrapper for _child read method.
         Gather all output and return it.
         """
+        if not timeout:
+            timeout = self._timeout
         _lines: list[str] = []
         if not self._child:
             raise RuntimeError("NUT3 connection has not been opened.")
