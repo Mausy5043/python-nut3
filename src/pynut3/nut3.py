@@ -104,7 +104,7 @@ class PyNUT3Client:
         if self._persistent:
             self._connect()
 
-        self.valid_commands= self.help()
+        self.valid_commands = self.help()
         self.valid_commands.append("PROTVER")
 
     def __enter__(self) -> "PyNUT3Client":
@@ -151,7 +151,7 @@ class PyNUT3Client:
         except Exception as exc:
             raise PyNUT3Error("Something went wrong!") from exc
 
-    def _read(self, timeout: float =TIMEOUT) -> list[str]:
+    def _read(self, timeout: float = TIMEOUT) -> list[str]:
         """Collect the output from the server.
 
         Args:
