@@ -86,7 +86,7 @@ class PyNUT3Client:
         """
         _LOGGER.debug(f"NUT Class initialization, Host/Port: {host}:{port}, Login: {login}")
 
-        self._debug = debug
+        self._debug: bool = debug
         self._host: str = host
         self._port: int = port
         self._login: Optional[str] = login
