@@ -117,8 +117,32 @@ class PyNUT3Client:
                 pass
 
     def _connect(self) -> None:
-        """Connects to the defined server."""
+        """Connects to the defined server.
+
+        If login/password was specified, the class tries to authenticate.
+        An error is raised if something goes wrong.
+        """
+        _result: str
         try:
+            self._child = pexpect.spawn(f'{_CALL_CMD} {self._host} {self._port}',
+                                              timeout=self._timeout,
+                                              echo=False
+                                              )
+            if self._login:
+                # untested. If you can test this, let me know if it works.
+                self._write(f"USERNAME {self._login}")
+                _result = self._read()
+                if "OK" not in _result:
+                    raise PyNUT3Error(f"LOGIN ERROR (USERNAME) : {_result}")
+
+            if self._password:
+                # untested. If you can test this, let me know if it works.
+                self._write(f"PASSWORD {self._password}")
+                _result = self._read()
+                if "OK" not in _result:
+                    raise PyNUT3Error(f"LOGIN ERROR (PASSWORD) : {_result}")
+        except Exception as exc:
+            raise PyNUT3Error("Something went wrong!") from exc
 
     def _read(self, timeout=5) -> list[str]:
         """Wrapper for _child read method.
