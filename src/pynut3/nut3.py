@@ -79,7 +79,7 @@ class PyNUT3Client:
                         for no authentication).
         password    : Password used for authentication (defaults to None).
         timeout     : Timeout used to wait for network response (defaults
-                        to 5 seconds).
+                        to 2 seconds).
         persistent  : Boolean, when true connection will be made in init method
                         and be held open, when false connection is open/closed
                         when calling each method
