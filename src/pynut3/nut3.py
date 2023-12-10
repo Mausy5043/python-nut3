@@ -634,35 +634,23 @@ class PyNUT3Client:
     #     except (ValueError, IndexError) as exc:
     #         raise PyNUT3Error(result.replace("\n", "")) from exc
 
-    def help(self) -> str:
-        """Send HELP command."""
-        _LOGGER.debug(f"NUT3 HELP called on '{self._host}'")
+    def help(self) -> list[str]:
+        """Execute HELP command.
 
-        if not self._persistent:
-            self._connect()
-
-        self._write("HELP\n")
-        result: str = self._read_until("\n")
-
-        if not self._persistent:
-            self._disconnect()
-
-        return result
+        Returns:
+            list of commands supported by the stack.
+        """
+        result: list[str] = self.cmd("HELP")
+        valid_commands: list[str] = result[0].split()[1:]
+        return valid_commands
 
     def ver(self) -> str:
-        """Send VER command."""
-        _LOGGER.debug(f"NUT3 VER called on '{self._host}'")
+        """Execute VER and PROTVER command.
 
-        if not self._persistent:
-            self._connect()
-
-        self._write("VER\n")
-        result: str = self._read_until("\n")
-
-        if not self._persistent:
-            self._disconnect()
-
-        return result
+        Returns:
+            combined version string
+        """
+        return " - protocol ".join([self.cmd("VER")[0], self.cmd("PROTVER")[0]])
 
 
 if __name__ == "__main__":
