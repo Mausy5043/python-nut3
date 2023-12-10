@@ -149,12 +149,12 @@ class PyNUT3Client:
             return ""
 
     def _write(self, string: str) -> None:
-        """Wrapper for _srv_handler sendline method."""
+        """Wrapper for _child write method."""
         try:
-            if self._srv_handler is None:
+            if not self._child:
                 raise RuntimeError("NUT3 connection has not been opened.")
-            self._srv_handler.sendline(string)
-        except pexpect.ExceptionPexpect:
+            self._child.sendline(string.encode("ascii"))
+        except (pexpect.ExceptionPexpect, EOFError, BrokenPipeError):
             _LOGGER.error("NUT3 problem writing to server.")
 
     def description(self, ups: str) -> str:
