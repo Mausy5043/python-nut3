@@ -206,7 +206,15 @@ class PyNUT3Client:
         if not self._persistent:
             self._disconnect()
 
-        _mod_list = [_s.replace('\r', '') for _s in _returned_list]
+        _mod_list: list[str] = []
+        for _s in _returned_list:
+            if 'BEGIN' == _s.split(" ")[0]:
+                _s = ''
+            if 'END' == _s.split(" ")[0]:
+                _s = ''
+            if _s:
+                _mod_list.append(_s.replace('\r', ''))
+
         return _mod_list
 
     # def description(self, ups: str) -> str:
