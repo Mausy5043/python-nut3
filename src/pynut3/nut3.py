@@ -84,7 +84,7 @@ class PyNUT3Client:
         debug       : Boolean, put class in debug mode (prints everything
                         on console, defaults to False).
         """
-        _LOGGER.debug(f"NUT Class initialization, Host/Port: {host}:{port}, Login: {login}")
+        _LOGGER.debug(f"NUT Class initialization on: {host}:{port}, Login: {login}")
 
         self._debug: bool = debug
         self._host: str = host
