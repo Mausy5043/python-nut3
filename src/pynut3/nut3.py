@@ -31,6 +31,11 @@ from typing import Any, Optional
 
 import pexpect
 
+
+class UnsupportedPlatformException(Exception):
+    """Exception for unsupported platforms"""
+
+
 if platform.system().lower() == "darwin":  # macOS
     _CALL_CMD = "nc"
     _SYSLOG_DEV = "/var/run/syslog"
@@ -38,7 +43,7 @@ elif platform.system().lower() == "linux":
     _CALL_CMD = "telnet"
     _SYSLOG_DEV = "/dev/log"
 else:
-    raise Exception("Unsupported platform")
+    raise UnsupportedPlatformException(f"Unsupported platform {platform.system()}")
 
 # configure the logging module
 _facility = logging.handlers.SysLogHandler.LOG_DAEMON
