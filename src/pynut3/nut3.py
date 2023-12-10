@@ -53,7 +53,7 @@ _LOGGER: logging.Logger = logging.getLogger(__name__)
 # list of supported commands (ref. RFC-9271)
 # USERNAME and PASSWORD are not in this list as login is part of the class.__init__
 SUPPORTED: list[str] = ["VER", "HELP", "LOGOUT", "LIST", "PROTVER"]
-TIMEOUT: float = 2.0
+TIMEOUT: int = 2
 
 
 class PyNUT3Error(Exception):
@@ -70,7 +70,7 @@ class PyNUT3Client:
         port: int = 3493,
         login: Optional[str] = None,
         password: Optional[str] = None,
-        timeout: float = TIMEOUT,
+        timeout: int = TIMEOUT,
         persistent: bool = True,
         debug: bool = True,
     ) -> None:
@@ -151,7 +151,7 @@ class PyNUT3Client:
         except Exception as exc:
             raise PyNUT3Error("Something went wrong!") from exc
 
-    def _read(self, timeout: float = TIMEOUT) -> list[str]:
+    def _read(self, timeout: int = TIMEOUT) -> list[str]:
         """Collect the output from the server.
 
         Args:
