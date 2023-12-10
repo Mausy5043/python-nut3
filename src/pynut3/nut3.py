@@ -204,7 +204,7 @@ class PyNUT3Client:
             self._connect()
 
         self._write(f"GET UPSDESC {ups}\n")
-        result: str = self._read_until("\n")
+        result: str = self._read()
 
         if not self._persistent:
             self._disconnect()
@@ -226,11 +226,11 @@ class PyNUT3Client:
             self._connect()
 
         self._write("LIST UPS\n")
-        result: str = self._read_until("\n")
+        result: str = self._read()
         if result != "BEGIN LIST UPS\n":
             raise PyNUT3Error(result.replace("\n", ""))
 
-        result = self._read_until("END LIST UPS\n")
+        result = self._read("END LIST UPS\n")
 
         ups_dict: Dict[str, str] = {}
         line: str
@@ -261,11 +261,11 @@ class PyNUT3Client:
             self._connect()
 
         self._write(f"LIST VAR {ups}\n")
-        result: str = self._read_until("\n")
+        result: str = self._read("\n")
         if result != f"BEGIN LIST VAR {ups}\n":
             raise PyNUT3Error(result.replace("\n", ""))
 
-        result = self._read_until(f"END LIST VAR {ups}\n")
+        result = self._read(f"END LIST VAR {ups}\n")
         offset: int = len(f"VAR {ups} ")
         end_offset: int = 0 - (len(f"END LIST VAR {ups}\n") + 1)
 
@@ -297,11 +297,11 @@ class PyNUT3Client:
             self._connect()
 
         self._write(f"LIST CMD {ups}\n")
-        result: str = self._read_until("\n")
+        result: str = self._read("\n")
         if result != f"BEGIN LIST CMD {ups}\n":
             raise PyNUT3Error(result.replace("\n", ""))
 
-        result = self._read_until(f"END LIST CMD {ups}\n")
+        result = self._read(f"END LIST CMD {ups}\n")
         offset: int = len(f"CMD {ups} ")
         end_offset: int = 0 - (len(f"END LIST CMD {ups}\n") + 1)
 
@@ -313,7 +313,7 @@ class PyNUT3Client:
             # For each var we try to get the available description
             try:
                 self._write(f"GET CMDDESC {ups} {command}\n")
-                temp: str = self._read_until("\n")
+                temp: str = self._read("\n")
                 if temp.startswith("CMDDESC"):
                     desc_offset = len(f"CMDDESC {ups} {command} ")
                     temp = temp[desc_offset:-1]
@@ -348,11 +348,11 @@ class PyNUT3Client:
             self._write(f"LIST CLIENTS {ups}\n")
         else:
             self._write("LIST CLIENTS\n")
-        result = self._read_until("\n")
+        result = self._read("\n")
         if result != "BEGIN LIST CLIENTS\n":
             raise PyNUT3Error(result.replace("\n", ""))
 
-        result = self._read_until("END LIST CLIENTS\n")
+        result = self._read("END LIST CLIENTS\n")
 
         clients: Dict[str, List[str]] = {}
         line: str
@@ -384,11 +384,11 @@ class PyNUT3Client:
             self._connect()
 
         self._write(f"LIST RW {ups}\n")
-        result: str = self._read_until("\n")
+        result: str = self._read("\n")
         if result != f"BEGIN LIST RW {ups}\n":
             raise PyNUT3Error(result.replace("\n", ""))
 
-        result = self._read_until(f"END LIST RW {ups}\n")
+        result = self._read(f"END LIST RW {ups}\n")
         offset: int = len(f"VAR {ups}")
         end_offset: int = 0 - (len(f"END LIST RW {ups}\n") + 1)
 
@@ -418,11 +418,11 @@ class PyNUT3Client:
             self._connect()
 
         self._write(f"LIST ENUM {ups} {var}\n")
-        result: str = self._read_until("\n")
+        result: str = self._read("\n")
         if result != f"BEGIN LIST ENUM {ups} {var}\n":
             raise PyNUT3Error(result.replace("\n", ""))
 
-        result = self._read_until(f"END LIST ENUM {ups} {var}\n")
+        result = self._read(f"END LIST ENUM {ups} {var}\n")
         offset: int = len(f"ENUM {ups} {var}")
         end_offset: int = 0 - (len(f"END LIST ENUM {ups} {var}\n") + 1)
 
@@ -449,11 +449,11 @@ class PyNUT3Client:
             self._connect()
 
         self._write(f"LIST RANGE {ups} {var}\n")
-        result: str = self._read_until("\n")
+        result: str = self._read("\n")
         if result != f"BEGIN LIST RANGE {ups} {var}\n":
             raise PyNUT3Error(result.replace("\n", ""))
 
-        result = self._read_until(f"END LIST RANGE {ups} {var}\n")
+        result = self._read(f"END LIST RANGE {ups} {var}\n")
         offset: int = len(f"RANGE {ups} {var}")
         end_offset: int = 0 - (len(f"END LIST RANGE {ups} {var}\n") + 1)
 
@@ -481,7 +481,7 @@ class PyNUT3Client:
             self._connect()
 
         self._write(f"SET VAR {ups} {var} {value}\n")
-        result = self._read_until("\n")
+        result = self._read("\n")
 
         if result != "OK\n":
             raise PyNUT3Error(result.replace("\n", ""))
@@ -497,7 +497,7 @@ class PyNUT3Client:
             self._connect()
 
         self._write(f"GET VAR {ups} {var}\n")
-        result: str = self._read_until("\n")
+        result: str = self._read("\n")
 
         if not self._persistent:
             self._disconnect()
@@ -520,7 +520,7 @@ class PyNUT3Client:
             self._connect()
 
         self._write(f"GET DESC {ups} {var}\n")
-        result: str = self._read_until("\n")
+        result: str = self._read("\n")
 
         if not self._persistent:
             self._disconnect()
@@ -538,7 +538,7 @@ class PyNUT3Client:
             self._connect()
 
         self._write(f"GET TYPE {ups} {var}\n")
-        result: str = self._read_until("\n")
+        result: str = self._read("\n")
 
         if not self._persistent:
             self._disconnect()
@@ -561,7 +561,7 @@ class PyNUT3Client:
             self._connect()
 
         self._write(f"GET CMDDESC {ups} {command}\n")
-        result: str = self._read_until("\n")
+        result: str = self._read("\n")
 
         if not self._persistent:
             self._disconnect()
@@ -579,7 +579,7 @@ class PyNUT3Client:
             self._connect()
 
         self._write(f"INSTCMD {ups} {command}\n")
-        result: str = self._read_until("\n")
+        result: str = self._read("\n")
 
         if result != "OK\n":
             raise PyNUT3Error(result.replace("\n", ""))
@@ -595,13 +595,13 @@ class PyNUT3Client:
             self._connect()
 
         self._write(f"MASTER {ups}\n")
-        result: str = self._read_until("\n")
+        result: str = self._read("\n")
         if result != "OK MASTER-GRANTED\n":
             raise PyNUT3Error(("Master level functions are not available", ""))
 
         _LOGGER.debug("FSD called...")
         self._write(f"FSD {ups}\n")
-        result = self._read_until("\n")
+        result = self._read("\n")
         if result != "OK FSD-SET\n":
             raise PyNUT3Error(result.replace("\n", ""))
 
@@ -616,7 +616,7 @@ class PyNUT3Client:
             self._connect()
 
         self._write(f"GET NUMLOGINS {ups}\n")
-        result: str = self._read_until("\n")
+        result: str = self._read("\n")
 
         if not self._persistent:
             self._disconnect()
