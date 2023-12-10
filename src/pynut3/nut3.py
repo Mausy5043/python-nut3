@@ -26,8 +26,19 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
 import logging
+import logging.handlers
 import pexpect
+import platform
 from typing import Any, Dict, List, Optional
+
+if platform.system().lower() == "darwin":  # macOS
+    _CALL_CMD = "nc"
+    _SYSLOG_DEV = '/dev/log'
+elif platform.system().lower() == "linux":
+    _CALL_CMD = "telnet"
+    _SYSLOG_DEV = '/var/run/syslog'
+else:
+    raise Exception("Unsupported platform")
 
 # configure the logging module
 _facility=logging.handlers.SysLogHandler.LOG_DAEMON
