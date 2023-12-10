@@ -197,6 +197,11 @@ class PyNUT3Client:
         """
         _LOGGER.debug(f"NUT3 {command} called on '{self._host}'")
 
+        if command.split(" ")[0] not in self.valid_commands:
+            raise PyNUT3Error(f"{command} is not supported by the server.")
+        if command.split(" ")[0] not in SUPPORTED:
+            raise PyNUT3Error(f"{command} is not supported by pynut3.")
+
         if not self._persistent:
             self._connect()
 
