@@ -51,7 +51,10 @@ logging.basicConfig(
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
 # list of supported commands (ref. RFC-9271)
-SUPPORTED = ['VER', 'HELP', 'LOGOUT']
+# USERNAME and PASSWORD are not in this list as login is part of the class.__init__
+SUPPORTED: list[str] = ['VER', 'HELP', 'LOGOUT',
+                        'LIST',
+                        'PROTVER']
 
 class PyNUT3Error(Exception):
     """Base class for custom exceptions."""
