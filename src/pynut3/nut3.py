@@ -33,29 +33,28 @@ from typing import Any, Dict, List, Optional
 
 if platform.system().lower() == "darwin":  # macOS
     _CALL_CMD = "nc"
-    _SYSLOG_DEV = '/var/run/syslog'
+    _SYSLOG_DEV = "/var/run/syslog"
 elif platform.system().lower() == "linux":
     _CALL_CMD = "telnet"
-    _SYSLOG_DEV = '/dev/log'
+    _SYSLOG_DEV = "/dev/log"
 else:
     raise Exception("Unsupported platform")
 
 # configure the logging module
-_facility=logging.handlers.SysLogHandler.LOG_DAEMON
-_handlers= [logging.handlers.SysLogHandler(address=_SYSLOG_DEV, facility=_facility)]
+_facility = logging.handlers.SysLogHandler.LOG_DAEMON
+_handlers = [logging.handlers.SysLogHandler(address=_SYSLOG_DEV, facility=_facility)]
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(module)s.%(funcName)s [%(levelname)s] - %(message)s",
-    handlers=_handlers
+    handlers=_handlers,
 )
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
 # list of supported commands (ref. RFC-9271)
 # USERNAME and PASSWORD are not in this list as login is part of the class.__init__
-SUPPORTED: list[str] = ['VER', 'HELP', 'LOGOUT',
-                        'LIST',
-                        'PROTVER']
+SUPPORTED: list[str] = ["VER", "HELP", "LOGOUT", "LIST", "PROTVER"]
 TIMEOUT: float = 2.0
+
 
 class PyNUT3Error(Exception):
     """Base class for custom exceptions."""
@@ -100,13 +99,13 @@ class PyNUT3Client:
         self._timeout: float = timeout
         self._persistent: bool = persistent
         self._child: Optional[pexpect.spawn] = None
-        self.valid_commands = ['HELP']
+        self.valid_commands = ["HELP"]
 
         if self._persistent:
             self._connect()
 
         self.valid_commands: list[str] = self.help()
-        self.valid_commands.append('PROTVER')
+        self.valid_commands.append("PROTVER")
 
     def __enter__(self) -> "PyNUT3Client":
         return self
@@ -133,10 +132,9 @@ class PyNUT3Client:
         """
         _result: str
         try:
-            self._child = pexpect.spawn(f'{_CALL_CMD} {self._host} {self._port}',
-                                              timeout=self._timeout,
-                                              echo=False
-                                              )
+            self._child = pexpect.spawn(
+                f"{_CALL_CMD} {self._host} {self._port}", timeout=self._timeout, echo=False
+            )
             if self._login:
                 # untested. If you can test this, let me know if it works.
                 self._write(f"USERNAME {self._login}")
@@ -167,7 +165,7 @@ class PyNUT3Client:
             raise RuntimeError("NUT3 connection has not been opened.")
         while True:
             try:
-                self._child.expect([pexpect.EOF, '\n'], timeout)
+                self._child.expect([pexpect.EOF, "\n"], timeout)
                 _lines.append(f"{self._child.before.decode('utf-8')}")
             except pexpect.exceptions.TIMEOUT:
                 break
@@ -186,7 +184,7 @@ class PyNUT3Client:
         except (pexpect.ExceptionPexpect, EOFError, BrokenPipeError):
             _LOGGER.error("NUT3 problem writing to server.")
 
-    def cmd(self, command:str) -> list[str]:
+    def cmd(self, command: str) -> list[str]:
         """Execute a valid supported command and return anything that gets returned.
 
         Args:
@@ -213,12 +211,12 @@ class PyNUT3Client:
 
         _mod_list: list[str] = []
         for _s in _returned_list:
-            if 'BEGIN' == _s.split(" ")[0]:
-                _s = ''
-            if 'END' == _s.split(" ")[0]:
-                _s = ''
+            if "BEGIN" == _s.split(" ")[0]:
+                _s = ""
+            if "END" == _s.split(" ")[0]:
+                _s = ""
             if _s:
-                _mod_list.append(_s.replace('\r', ''))
+                _mod_list.append(_s.replace("\r", ""))
 
         return _mod_list
 
@@ -671,11 +669,16 @@ class PyNUT3Client:
 
 
 if __name__ == "__main__":
-    client = PyNUT3Client(host='192.168.2.17')
-    print(client.help())
-    ups_dict = client.get_dict_ups()
-    for k1, v1 in ups_dict.items():
-        print(f"{v1} is called with id {k1}")
-        vars_dict = client.get_dict_vars(k1)
-        for k2, v2 in vars_dict.items():
-            print(f"{k2}\t:\t{v2}")
+    client = PyNUT3Client(host="192.168.2.17")
+    version: str = client.ver()
+    print(version)
+    helpstr: list[str] = client.help()
+    print(helpstr)
+
+    # print(client.help())
+    # ups_dict = client.get_dict_ups()
+    # for k1, v1 in ups_dict.items():
+    #     print(f"{v1} is called with id {k1}")
+    #     vars_dict = client.get_dict_vars(k1)
+    #     for k2, v2 in vars_dict.items():
+    #         print(f"{k2}\t:\t{v2}")
