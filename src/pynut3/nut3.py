@@ -130,7 +130,7 @@ class PyNUT3Client:
         If login/password was specified, the class tries to authenticate.
         An error is raised if something goes wrong.
         """
-        _result: str
+        _result: list[str]
         try:
             self._child = pexpect.spawn(
                 f"{_CALL_CMD} {self._host} {self._port}", timeout=self._timeout, echo=False
