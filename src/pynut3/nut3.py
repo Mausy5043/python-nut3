@@ -55,6 +55,7 @@ _LOGGER: logging.Logger = logging.getLogger(__name__)
 SUPPORTED: list[str] = ['VER', 'HELP', 'LOGOUT',
                         'LIST',
                         'PROTVER']
+TIMEOUT: float = 2.0
 
 class PyNUT3Error(Exception):
     """Base class for custom exceptions."""
@@ -70,7 +71,7 @@ class PyNUT3Client:
         port: int = 3493,
         login: Optional[str] = None,
         password: Optional[str] = None,
-        timeout: float = 2,
+        timeout: float = TIMEOUT,
         persistent: bool = True,
         debug: bool = True,
     ) -> None:
@@ -152,12 +153,8 @@ class PyNUT3Client:
         except Exception as exc:
             raise PyNUT3Error("Something went wrong!") from exc
 
-    def _read(self, timeout=None) -> list[str]:
-        """Wrapper for _child read method.
-        Gather all output and return it.
-        """
-        if not timeout:
-            timeout = self._timeout
+    def _read(self, timeout=TIMEOUT) -> list[str]:
+        """Collect the output from the server.
         _lines: list[str] = []
         if not self._child:
             raise RuntimeError("NUT3 connection has not been opened.")
