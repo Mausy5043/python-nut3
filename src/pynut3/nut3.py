@@ -95,7 +95,7 @@ class PyNUT3Client:
         self._password: Optional[str] = password
         self._timeout: float = timeout
         self._persistent: bool = persistent
-        self._srv_handler: Optional[pexpect.spawn] = None
+        self._child: Optional[pexpect.spawn] = None
 
         if self._persistent:
             self._connect()
@@ -108,10 +108,10 @@ class PyNUT3Client:
 
     def _disconnect(self) -> None:
         """Disconnect from the server."""
-        if self._srv_handler:
+        if self._child:
             try:
                 self._srv_handler.sendline("LOGOUT")
-                self._srv_handler.close()
+                self._child.close()
             except pexpect.ExceptionPexpect:
                 # the connection was already closed
                 pass
