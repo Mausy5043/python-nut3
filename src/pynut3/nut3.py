@@ -33,10 +33,10 @@ from typing import Any, Dict, List, Optional
 
 if platform.system().lower() == "darwin":  # macOS
     _CALL_CMD = "nc"
-    _SYSLOG_DEV = '/dev/log'
+    _SYSLOG_DEV = '/var/run/syslog'
 elif platform.system().lower() == "linux":
     _CALL_CMD = "telnet"
-    _SYSLOG_DEV = '/var/run/syslog'
+    _SYSLOG_DEV = '/dev/log'
 else:
     raise Exception("Unsupported platform")
 
