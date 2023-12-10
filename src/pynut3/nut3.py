@@ -160,7 +160,11 @@ class PyNUT3Client:
         return _lines
 
     def _write(self, string: str) -> None:
-        """Wrapper for _child write method."""
+        """Wrapper for _child write method.
+
+        Args:
+            string: string to be sent to the server.
+        """
         try:
             if not self._child:
                 raise RuntimeError("NUT3 connection has not been opened.")
