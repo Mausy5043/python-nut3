@@ -4,8 +4,9 @@
 
 """
 
-import pexpect
 import platform
+
+import pexpect
 
 host = "192.168.2.17"
 port = "3493"
