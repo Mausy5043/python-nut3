@@ -96,7 +96,7 @@ class PyNUT3Client:
         self._port: int = port
         self._login: Optional[str] = login
         self._password: Optional[str] = password
-        self._timeout: float = timeout
+        self._timeout: int = timeout
         self._persistent: bool = persistent
         self._child: Optional[pexpect.spawn] = None
         self.valid_commands: list[str] = ["HELP"]
