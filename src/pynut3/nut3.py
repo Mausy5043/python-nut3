@@ -119,34 +119,21 @@ class PyNUT3Client:
     def _connect(self) -> None:
         """Connects to the defined server."""
         try:
-            self._srv_handler = pexpect.spawn(f"telnet {self._host} {self._port}")
-            self._authenticate()
-        except pexpect.ExceptionPexpect as exc:
-            raise PyNUT3Error(f"Error connecting to server: {exc}")
 
-    def _authenticate(self) -> None:
-        """Authenticate to the server if login and password are provided."""
-        if self._login is not None:
-            self._srv_handler.expect("USERNAME")
-            self._srv_handler.sendline(self._login)
-
-        if self._password is not None:
-            self._srv_handler.expect("PASSWORD")
-            self._srv_handler.sendline(self._password)
-
-        self._srv_handler.expect("")
-        self._srv_handler.sendline("")  # Sending an empty line to ensure we get to the command prompt
-
-    def _read_until(self, string: str) -> str:
-        """Wrapper for _srv_handler expect method."""
-        try:
-            if self._srv_handler is None:
-                raise RuntimeError("NUT3 connection has not been opened.")
-            self._srv_handler.expect_exact(string)
-            return self._srv_handler.before.decode()
-        except pexpect.TIMEOUT:
-            _LOGGER.error(f"NUT3 Timeout while waiting for: {string}")
-            return ""
+    def _read(self, timeout=5) -> list[str]:
+        """Wrapper for _child read method.
+        Gather all output and return it.
+        """
+        _lines: list[str] = []
+        if not self._child:
+            raise RuntimeError("NUT3 connection has not been opened.")
+        while True:
+            try:
+                self._child.expect([pexpect.EOF, '\n'], timeout)
+                _lines.append(f"{self._child.before.decode('utf-8')}")
+            except pexpect.exceptions.TIMEOUT:
+                break
+        return _lines
 
     def _write(self, string: str) -> None:
         """Wrapper for _child write method."""
