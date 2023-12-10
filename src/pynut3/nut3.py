@@ -99,12 +99,12 @@ class PyNUT3Client:
         self._timeout: float = timeout
         self._persistent: bool = persistent
         self._child: Optional[pexpect.spawn] = None
-        self.valid_commands = ["HELP"]
+        self.valid_commands: list[str] = ["HELP"]
 
         if self._persistent:
             self._connect()
 
-        self.valid_commands: list[str] = self.help()
+        self.valid_commands= self.help()
         self.valid_commands.append("PROTVER")
 
     def __enter__(self) -> "PyNUT3Client":
