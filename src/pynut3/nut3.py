@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""A Python3 module for dealing with NUT (Network UPS Tools) servers.
+"""A Python3 module for communicating with NUT (Network UPS Tools) servers.
 
 * PyNUT3Error: Base class for custom exceptions.
 * PyNUT3Client: Allows connecting to and communicating with PyNUT servers.
