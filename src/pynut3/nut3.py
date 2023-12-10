@@ -110,11 +110,12 @@ class PyNUT3Client:
         """Disconnect from the server."""
         if self._child:
             try:
-                self._srv_handler.sendline("LOGOUT")
+                self._write("LOGOUT\n")
                 self._child.close()
             except pexpect.ExceptionPexpect:
                 # the connection was already closed
                 pass
+        self._child = None
 
     def _connect(self) -> None:
         """Connects to the defined server.
