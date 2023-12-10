@@ -25,11 +25,11 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
-import logging
 import logging.handlers
-import pexpect
 import platform
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
+
+import pexpect
 
 if platform.system().lower() == "darwin":  # macOS
     _CALL_CMD = "nc"
