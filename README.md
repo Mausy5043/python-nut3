@@ -8,21 +8,21 @@
 #### (aka python-nut3)
 
 This is a Python3 library to allow communication with
-NUT ([Network UPS Tools](http://www.networkupstools.org/)) Uninterruptible Power Supply servers.
+NUT ([Network UPS Tools](http://www.networkupstools.org/)) Uninterruptible Power Supply servers following [RFC-9271](https://www.rfc-editor.org/rfc/rfc9271.html)
 
-**Note**: This is an unofficial project, and is in no way supported orendorsed by
+**Note**: This is an unofficial project, and is in no way supported or endorsed by
 the [Network UPS Tools developers](https://github.com/networkupstools).
 
 ## Requirements
 
 Development of this package is done in Python 3.11. The package is considered forwards compatible
 probably upto Python 3.12 and possibly also beyond. Backwards compatibility is not guaranteed; if
-it works on Python 3.7 or before consider yourself lucky.
+it works on Python 3.9 or before consider yourself lucky.
 [Python versions that are end-of-life](https://devguide.python.org/versions/) are not supported.
 
 ## Installation
 
-`pynut3` requires telnet to be installed. If it is not available on your system you'll need to install it first.
+On Linux systemsa `pynut3` requires telnet to be installed. If it is not available on your system you'll need to install it first. On macOS `telnet` is not needed; `nc` will be used automatically.
 ```bash
 sudo apt install telnet
 ```
