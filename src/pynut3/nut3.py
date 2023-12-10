@@ -70,7 +70,7 @@ class PyNUT3Client:
         port: int = 3493,
         login: Optional[str] = None,
         password: Optional[str] = None,
-        timeout: float = 5,
+        timeout: float = 2,
         persistent: bool = True,
         debug: bool = True,
     ) -> None:
