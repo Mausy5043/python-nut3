@@ -19,7 +19,7 @@ else:
     raise Exception("Unsupported platform")
 
 
-def wait_for_output(child_process, timeout=5) -> list[str]:
+def wait_for_output(child_process, timeout: int = 5) -> list[str]:
     lineno = 1
     lines: list[str] = []
     while True:
@@ -36,7 +36,7 @@ def wait_for_output(child_process, timeout=5) -> list[str]:
 with pexpect.spawn(f"{shl_cmd} {host} {port}", timeout=5, echo=False) as child:
     # Send a newline character (assuming no login is required)
     child.sendline("")
-    result = wait_for_output(child_process=child)
+    result: list[str] = wait_for_output(child_process=child)
     for line in result:
         print(line)
 
