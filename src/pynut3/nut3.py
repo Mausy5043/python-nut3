@@ -119,6 +119,7 @@ class PyNUT3Client:
         self.valid_commands: list[str] = ["HELP"]
         self.valid_commands = self.help()
         self.valid_commands.append("PROTVER")
+
         self.connected_devices: dict[str, str] = self._get_devices()
         self.devices: dict= {}
         for dev in self.connected_devices:
@@ -126,7 +127,9 @@ class PyNUT3Client:
             print(dev)
             self.devices[dev]['commands'] = self._get_commands(dev)
             self.devices[dev]['vars'] = self._get_vars(dev, 'VAR')  # r
-            self.devices[dev]['rw'] = self._get_vars(dev, 'RW')  # w
+            for k,v in self._get_vars(dev, 'RW').items():
+                self.devices[dev]['vars'][k] = v
+            #self.devices[dev]['rw'] = self._get_vars(dev, 'RW')  # w
 
     def __enter__(self) -> "PyNUT3Client":
         return self
