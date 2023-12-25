@@ -57,7 +57,11 @@ _LOGGER: logging.Logger = logging.getLogger(__name__)
 
 # list of supported commands (ref. RFC-9271)
 # USERNAME and PASSWORD are not in this list as login is part of the class.__init__
-SUPPORTED: list[str] = ["VER", "HELP", "LOGOUT", "LIST", "PROTVER"]
+SUPPORTED: dict[str, list[str]] = {"commands": ["VER", "HELP", "LOGOUT", "LIST", "PROTVER"],
+                                   # For the following commands the listed sub-commands are supported.
+                                   # A `%` is used to indicate that an additional parameter is required.
+                                   "LIST": ["CLIENT %", "CMD %", "RW %", "UPS", "VAR %"],
+                       }
 TIMEOUT: int = 2
 
 
