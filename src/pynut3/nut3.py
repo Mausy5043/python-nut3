@@ -293,13 +293,16 @@ class PyNUT3Client:
         Returns:
             dict containing variable name and current value.
         """
+        _type = "r-"
+        if sub == "RW":
+            _type = "rw"
         _dict: dict[str, str] = {}
         _list: list[str]= self.cmd(f"LIST {sub} {device}")
         for _kv in _list:
             _kv: list[str] = shlex.split(_kv)
             _k: str = _kv[0]
             _v: str = _kv[1].replace('\"', '')
-            _dict[_k] = _v
+            _dict[_k] = [_v, _type]
         return _dict
 
     def update(self, device) -> None:
