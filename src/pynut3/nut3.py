@@ -109,6 +109,8 @@ class PyNUT3Client:
         if self._persistent:
             self._connect()
 
+        # build the list of valid commands
+        self.valid_commands: list[str] = ["HELP"]
         self.valid_commands = self.help()
         self.valid_commands.append("PROTVER")
 
