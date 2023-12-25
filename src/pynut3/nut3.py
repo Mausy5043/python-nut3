@@ -232,6 +232,12 @@ class PyNUT3Client:
 
         return _mod_list
 
+    def _get_commands(self, device: str) -> dict[str, list[str]]:
+        """Return a list of commands supported by the device."""
+        _dict: dict[str, list[str]]  = {}
+        _list = self.cmd(f"LIST CMD {device}")
+        return _list
+
     # def description(self, ups: str) -> str:
     #     """Returns the description for a given UPS."""
     #     _LOGGER.debug(f"NUT3 requesting description from server {self._host}")
