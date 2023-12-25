@@ -302,6 +302,10 @@ class PyNUT3Client:
             _dict[_k] = _v
         return _dict
 
+    def update(self, device) -> None:
+        for k,v in self._get_vars(device, 'VAR').items():
+            self.devices[device]['vars'][k][0] = v[0]
+
     # def device_vars(self):
     #     return self._get_vars()
 
