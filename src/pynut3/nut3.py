@@ -54,6 +54,7 @@ logging.basicConfig(
     handlers=_handlers,
 )
 _LOGGER: logging.Logger = logging.getLogger(__name__)
+DEBUG = True
 
 # list of supported commands (ref. RFC-9271)
 # USERNAME and PASSWORD are not in this list as login is part of the class.__init__
