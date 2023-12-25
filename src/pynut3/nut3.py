@@ -111,7 +111,6 @@ class PyNUT3Client:
         self._persistent: bool = persistent
         self._child: Optional[pexpect.spawn] = None
 
-
         if self._persistent:
             self._connect()
 
@@ -343,13 +342,17 @@ if __name__ == "__main__":
         print(f"    {dev} = {client.connected_devices[dev]}")
         print("Commands")
         for num,item in enumerate(client.devices[dev]['commands']):
-            print(f"        x {item}")
-        print("Variables")
+            print(f"        {item}")
+        print("Variables & Settings")
         for num,item in client.devices[dev]['vars'].items():
-            print(f"        r {num} = {item}")
-        print("Settings")
-        for num,item in client.devices[dev]['rw'].items():
-            print(f"        w {num} = {item}")
+            print(f"  ({item[1]})  {num} = {item[0]}")
+        client.update(dev)
+        for num,item in client.devices[dev]['vars'].items():
+            print(f"  ({item[1]})  {num} = {item[0]}")
+
+        # print("Settings")
+        # for num,item in client.devices[dev]['rw'].items():
+        #     print(f"        ({item[1]}) {num} = {item[0]}")
         #     print(f"       r--   {item}")
         # for num,item in enumerate(client.device_commands[dev]):
         #     print(f"       --x   {item}")
