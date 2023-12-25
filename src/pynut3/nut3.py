@@ -27,6 +27,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import logging.handlers
 import platform
+import shlex
 from typing import Any, Optional
 
 import pexpect
@@ -109,7 +110,7 @@ class PyNUT3Client:
         self._timeout: int = timeout
         self._persistent: bool = persistent
         self._child: Optional[pexpect.spawn] = None
-        self.valid_commands: list[str] = ["HELP"]
+
 
         if self._persistent:
             self._connect()
@@ -118,6 +119,14 @@ class PyNUT3Client:
         self.valid_commands: list[str] = ["HELP"]
         self.valid_commands = self.help()
         self.valid_commands.append("PROTVER")
+        self.connected_devices: dict[str, str] = self._get_devices()
+        self.devices: dict= {}
+        for dev in self.connected_devices:
+            self.devices[dev]: dict= {}
+            print(dev)
+            self.devices[dev]['commands'] = self._get_commands(dev)
+            self.devices[dev]['vars'] = self._get_vars(dev, 'VAR')  # r
+            self.devices[dev]['rw'] = self._get_vars(dev, 'RW')  # w
 
     def __enter__(self) -> "PyNUT3Client":
         return self
@@ -189,6 +198,8 @@ class PyNUT3Client:
         Args:
             string: string to be sent to the server.
         """
+        if DEBUG:
+            print("***",string)
         try:
             if not self._child:
                 raise RuntimeError("NUT3 connection has not been opened.")
@@ -205,12 +216,34 @@ class PyNUT3Client:
         Returns:
             sanitized output from command
         """
-        _LOGGER.debug(f"NUT3 {command} called on '{self._host}'")
+        if DEBUG:
+            _LOGGER.debug(f"NUT3 {command} requested on '{self._host}'")
+            print(f">> .{command}.")
+        splt_cmd: list[str] = command.split(" ")
+        main_cmd: str = splt_cmd[0]
+        try:
+            sub_cmd: str = splt_cmd[1]
+        except IndexError:
+            sub_cmd = ""
+        try:
+            par_cmd: str = splt_cmd[2]
+        except IndexError:
+            par_cmd = ""
 
-        if command.split(" ")[0] not in self.valid_commands:
-            raise PyNUT3Error(f"{command} is not supported by the server.")
-        if command.split(" ")[0] not in SUPPORTED:
-            raise PyNUT3Error(f"{command} is not supported by pynut3.")
+        if main_cmd not in self.valid_commands:
+            # unknown command
+            raise PyNUT3Error(f"{main_cmd} is not supported by the server.")
+
+        if main_cmd not in SUPPORTED["commands"]:
+            # unsupported command
+            raise PyNUT3Error(f"'{main_cmd}' is not supported by pynut3.")
+        if (sub_cmd and not par_cmd) and sub_cmd not in SUPPORTED[main_cmd]:
+            # unsupported sub-command
+            # OR sub-command without required parameter
+            raise PyNUT3Error(f"'{main_cmd} {sub_cmd}' is not supported by pynut3.")
+        if (sub_cmd and par_cmd) and f"{sub_cmd} %" not in SUPPORTED[main_cmd]:
+            # sub-command does not have a parameter, but parameter was passed
+            raise PyNUT3Error(f"'{main_cmd} {sub_cmd} {par_cmd}' is not supported by pynut3.")
 
         if not self._persistent:
             self._connect()
@@ -222,14 +255,16 @@ class PyNUT3Client:
             self._disconnect()
 
         _mod_list: list[str] = []
+        _s: str
         for _s in _returned_list:
             if "BEGIN" == _s.split(" ")[0]:
                 _s = ""
             if "END" == _s.split(" ")[0]:
                 _s = ""
             if _s:
+                _s = _s.replace(f"{sub_cmd} {par_cmd} ", "")
+            if _s:
                 _mod_list.append(_s.replace("\r", ""))
-
         return _mod_list
 
     def _get_commands(self, device: str) -> dict[str, list[str]]:
@@ -237,6 +272,93 @@ class PyNUT3Client:
         _dict: dict[str, list[str]]  = {}
         _list = self.cmd(f"LIST CMD {device}")
         return _list
+
+    def _get_devices(self) -> dict[str, str]:
+        """Return a dict of devices connected to this server.
+
+        Returns:
+            dict containing device name and description.
+        """
+        _dict: dict[str, str] = {}
+        _list: list[str]= self.cmd("LIST UPS")
+        _ups: list[str] = []
+        for _entry in _list:
+            _ups = shlex.split(_entry)
+            _dict[_ups[1]] = _ups[2]
+        return _dict
+
+    def _get_vars(self, device: str, sub: str) -> dict[str,str]:
+        """Return a dict of variables and their current values.
+
+        Returns:
+            dict containing variable name and current value.
+        """
+        _dict: dict[str, str] = {}
+        _list: list[str]= self.cmd(f"LIST {sub} {device}")
+        for _kv in _list:
+            _kv: list[str] = shlex.split(_kv)
+            _k: str = _kv[0]
+            _v: str = _kv[1].replace('\"', '')
+            _dict[_k] = _v
+        return _dict
+
+    # def device_vars(self):
+    #     return self._get_vars()
+
+    def help(self) -> list[str]:
+        """Execute HELP command.
+
+        Returns:
+            list of commands supported by the stack.
+        """
+        result: list[str] = self.cmd("HELP")
+        valid_commands: list[str] = result[0].split()[1:]
+        return valid_commands
+
+    def ver(self) -> str:
+        """Execute VER and PROTVER command.
+
+        Returns:
+            combined version string
+        """
+        return " - protocol ".join([self.cmd("VER")[0], self.cmd("PROTVER")[0]])
+
+
+
+if __name__ == "__main__":
+    client = PyNUT3Client(host="192.168.2.17")
+    print(client.valid_commands)
+    print("Connected Devices & Available Commands:")
+    for dev in client.connected_devices:
+        print(f"    {dev} = {client.connected_devices[dev]}")
+        print("Commands")
+        for num,item in enumerate(client.devices[dev]['commands']):
+            print(f"        x {item}")
+        print("Variables")
+        for num,item in client.devices[dev]['vars'].items():
+            print(f"        r {num} = {item}")
+        print("Settings")
+        for num,item in client.devices[dev]['rw'].items():
+            print(f"        w {num} = {item}")
+        #     print(f"       r--   {item}")
+        # for num,item in enumerate(client.device_commands[dev]):
+        #     print(f"       --x   {item}")
+    # version: str = client.ver()
+    # print(version)
+    # helpstr: list[str] = client.help()
+    # print(helpstr)
+
+
+    # print(client.help())
+    # ups_dict = client.get_dict_ups()
+    # for k1, v1 in ups_dict.items():
+    #     print(f"{v1} is called with id {k1}")
+    #     vars_dict = client.get_dict_vars(k1)
+    #     for k2, v2 in vars_dict.items():
+    #         print(f"{k2}\t:\t{v2}")
+
+
+
 
     # def description(self, ups: str) -> str:
     #     """Returns the description for a given UPS."""
@@ -666,37 +788,3 @@ class PyNUT3Client:
     #         return int(result.split(" ")[2].strip())
     #     except (ValueError, IndexError) as exc:
     #         raise PyNUT3Error(result.replace("\n", "")) from exc
-
-    def help(self) -> list[str]:
-        """Execute HELP command.
-
-        Returns:
-            list of commands supported by the stack.
-        """
-        result: list[str] = self.cmd("HELP")
-        valid_commands: list[str] = result[0].split()[1:]
-        return valid_commands
-
-    def ver(self) -> str:
-        """Execute VER and PROTVER command.
-
-        Returns:
-            combined version string
-        """
-        return " - protocol ".join([self.cmd("VER")[0], self.cmd("PROTVER")[0]])
-
-
-if __name__ == "__main__":
-    client = PyNUT3Client(host="192.168.2.17")
-    version: str = client.ver()
-    print(version)
-    helpstr: list[str] = client.help()
-    print(helpstr)
-
-    # print(client.help())
-    # ups_dict = client.get_dict_ups()
-    # for k1, v1 in ups_dict.items():
-    #     print(f"{v1} is called with id {k1}")
-    #     vars_dict = client.get_dict_vars(k1)
-    #     for k2, v2 in vars_dict.items():
-    #         print(f"{k2}\t:\t{v2}")
