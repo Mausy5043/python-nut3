@@ -363,7 +363,7 @@ class PyNUT3Client:
         valid_commands: list[str] = result[0].split()[1:]
         return valid_commands
 
-    def ver(self) -> str:
+    def version(self) -> str:
         """Execute VER and PROTVER command.
 
         Returns:
