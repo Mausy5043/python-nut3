@@ -137,16 +137,26 @@ class PyNUT3Client:
         self.valid_commands = self.help()
         self.valid_commands.append("PROTVER")
 
+        # build the list of connected NUT-capable devices
         self.connected_devices: dict[str, str] = self._get_devices()
-        self.devices: dict = {}
-        for dev in self.connected_devices:
-            self.devices[dev]: dict = {}
-            print(dev)
-            self.devices[dev]["commands"] = self._get_commands(dev)
-            self.devices[dev]["vars"] = self._get_vars(dev, "VAR")  # r
-            for k, v in self._get_vars(dev, "RW").items():
-                self.devices[dev]["vars"][k] = v
-            # self.devices[dev]['rw'] = self._get_vars(dev, 'RW')  # w
+        # build
+        self.device_state: dict[str, dict] = {}  # type: ignore[type-arg]
+        for _dev in self.connected_devices:
+            self.device_state[_dev] = {}
+            # get commands supported by the device
+            self.device_state[_dev]["commands"] = self._get_commands(_dev)
+            # get all the variables the device knows about
+            self.device_state[_dev]["vars"] = self._get_vars(_dev, "VAR")
+            # add info about the r/w variables
+            for k, v in self._get_vars(_dev, "RW").items():
+                self.device_state[_dev]["vars"][k] = v
+            # add variable descriptions if requested
+            for k, v in self.device_state[_dev]["vars"].items():
+                if descriptors:
+                    v.append(self.get_var_desc(_dev, k))
+                else:
+                    v.append(" ")
+                self.device_state[_dev]["vars"][k] = v
 
     def __enter__(self) -> "PyNUT3Client":
         return self
