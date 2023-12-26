@@ -55,15 +55,16 @@ logging.basicConfig(
     handlers=_handlers,
 )
 _LOGGER: logging.Logger = logging.getLogger(__name__)
-DEBUG = True
+DEBUG = False
 
 # list of supported commands (ref. RFC-9271)
 # USERNAME and PASSWORD are not in this list as login is part of the class.__init__
-SUPPORTED: dict[str, list[str]] = {"commands": ["VER", "HELP", "LOGOUT", "LIST", "PROTVER"],
-                                   # For the following commands the listed sub-commands are supported.
-                                   # A `%` is used to indicate that an additional parameter is required.
-                                   "LIST": ["CLIENT %", "CMD %", "RW %", "UPS", "VAR %"],
-                       }
+SUPPORTED: dict[str, list[str]] = {
+    "commands": ["VER", "HELP", "LOGOUT", "LIST", "PROTVER"],
+    # For the following commands the listed sub-commands are supported.
+    # A `%` is used to indicate that an additional parameter is required.
+    "LIST": ["CLIENT %", "CMD %", "RW %", "UPS", "VAR %"],
+}
 TIMEOUT: int = 2
 
 
@@ -120,15 +121,15 @@ class PyNUT3Client:
         self.valid_commands.append("PROTVER")
 
         self.connected_devices: dict[str, str] = self._get_devices()
-        self.devices: dict= {}
+        self.devices: dict = {}
         for dev in self.connected_devices:
-            self.devices[dev]: dict= {}
+            self.devices[dev]: dict = {}
             print(dev)
-            self.devices[dev]['commands'] = self._get_commands(dev)
-            self.devices[dev]['vars'] = self._get_vars(dev, 'VAR')  # r
-            for k,v in self._get_vars(dev, 'RW').items():
-                self.devices[dev]['vars'][k] = v
-            #self.devices[dev]['rw'] = self._get_vars(dev, 'RW')  # w
+            self.devices[dev]["commands"] = self._get_commands(dev)
+            self.devices[dev]["vars"] = self._get_vars(dev, "VAR")  # r
+            for k, v in self._get_vars(dev, "RW").items():
+                self.devices[dev]["vars"][k] = v
+            # self.devices[dev]['rw'] = self._get_vars(dev, 'RW')  # w
 
     def __enter__(self) -> "PyNUT3Client":
         return self
@@ -201,7 +202,7 @@ class PyNUT3Client:
             string: string to be sent to the server.
         """
         if DEBUG:
-            print("***",string)
+            print("***", string)
         try:
             if not self._child:
                 raise RuntimeError("NUT3 connection has not been opened.")
@@ -271,7 +272,7 @@ class PyNUT3Client:
 
     def _get_commands(self, device: str) -> dict[str, list[str]]:
         """Return a list of commands supported by the device."""
-        _dict: dict[str, list[str]]  = {}
+        _dict: dict[str, list[str]] = {}
         _list = self.cmd(f"LIST CMD {device}")
         return _list
 
@@ -282,14 +283,14 @@ class PyNUT3Client:
             dict containing device name and description.
         """
         _dict: dict[str, str] = {}
-        _list: list[str]= self.cmd("LIST UPS")
+        _list: list[str] = self.cmd("LIST UPS")
         _ups: list[str] = []
         for _entry in _list:
             _ups = shlex.split(_entry)
             _dict[_ups[1]] = _ups[2]
         return _dict
 
-    def _get_vars(self, device: str, sub: str) -> dict[str,str]:
+    def _get_vars(self, device: str, sub: str) -> dict[str, str]:
         """Return a dict of variables and their current values.
 
         Returns:
@@ -299,17 +300,17 @@ class PyNUT3Client:
         if sub == "RW":
             _type = "rw"
         _dict: dict[str, str] = {}
-        _list: list[str]= self.cmd(f"LIST {sub} {device}")
+        _list: list[str] = self.cmd(f"LIST {sub} {device}")
         for _kv in _list:
             _kv: list[str] = shlex.split(_kv)
             _k: str = _kv[0]
-            _v: str = _kv[1].replace('\"', '')
+            _v: str = _kv[1].replace('"', "")
             _dict[_k] = [_v, _type]
         return _dict
 
     def update(self, device) -> None:
-        for k,v in self._get_vars(device, 'VAR').items():
-            self.devices[device]['vars'][k][0] = v[0]
+        for k, v in self._get_vars(device, "VAR").items():
+            self.devices[device]["vars"][k][0] = v[0]
 
     # def device_vars(self):
     #     return self._get_vars()
@@ -333,7 +334,6 @@ class PyNUT3Client:
         return " - protocol ".join([self.cmd("VER")[0], self.cmd("PROTVER")[0]])
 
 
-
 if __name__ == "__main__":
     client = PyNUT3Client(host="192.168.2.17")
     print(client.valid_commands)
@@ -341,13 +341,13 @@ if __name__ == "__main__":
     for dev in client.connected_devices:
         print(f"    {dev} = {client.connected_devices[dev]}")
         print("Commands")
-        for num,item in enumerate(client.devices[dev]['commands']):
+        for num, item in enumerate(client.devices[dev]["commands"]):
             print(f"        {item}")
         print("Variables & Settings")
-        for num,item in client.devices[dev]['vars'].items():
+        for num, item in client.devices[dev]["vars"].items():
             print(f"  ({item[1]})  {num} = {item[0]}")
         client.update(dev)
-        for num,item in client.devices[dev]['vars'].items():
+        for num, item in client.devices[dev]["vars"].items():
             print(f"  ({item[1]})  {num} = {item[0]}")
 
         # print("Settings")
@@ -361,7 +361,6 @@ if __name__ == "__main__":
     # helpstr: list[str] = client.help()
     # print(helpstr)
 
-
     # print(client.help())
     # ups_dict = client.get_dict_ups()
     # for k1, v1 in ups_dict.items():
@@ -369,9 +368,6 @@ if __name__ == "__main__":
     #     vars_dict = client.get_dict_vars(k1)
     #     for k2, v2 in vars_dict.items():
     #         print(f"{k2}\t:\t{v2}")
-
-
-
 
     # def description(self, ups: str) -> str:
     #     """Returns the description for a given UPS."""
