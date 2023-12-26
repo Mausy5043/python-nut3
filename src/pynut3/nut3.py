@@ -95,6 +95,7 @@ class PyNUT3Client:
         password: Optional[str] = None,
         timeout: int = TIMEOUT,
         persistent: bool = True,
+        descriptors: bool = False,
         debug: bool = True,
     ) -> None:
         """Class initialization method.
@@ -125,6 +126,7 @@ class PyNUT3Client:
         self._password: Optional[str] = password
         self._timeout: int = timeout
         self._persistent: bool = persistent
+        self.descriptors: bool = descriptors
         self._child: Optional[pexpect.spawn] = None
 
         if self._persistent:
