@@ -265,14 +265,7 @@ class PyNUT3Client:
             # sub-command does not have a parameter, but parameter was passed
             raise PyNUT3Error(f"'{main_cmd} {sub_cmd} {par_cmd}' is not supported by pynut3.")
 
-        if not self._persistent:
-            self._connect()
-
-        self._write(command)
-        _returned_list: list[str] = self._read()
-
-        if not self._persistent:
-            self._disconnect()
+        _returned_list = self._call(command)
 
         _mod_list: list[str] = []
         _s: str
