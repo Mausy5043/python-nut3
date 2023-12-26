@@ -317,21 +317,21 @@ class PyNUT3Client:
             _dict[_ups[0]] = _ups[1]
         return _dict
 
-    def _get_vars(self, device: str, sub: str) -> dict[str, str]:
+    def _get_vars(self, device: str, sub: str) -> dict[str, list[str]]:
         """Return a dict of variables and their current values.
 
         Returns:
             dict containing variable name and current value.
         """
-        _type = "r-"
+        _type: str = "r-"
         if sub == "RW":
             _type = "rw"
-        _dict: dict[str, str] = {}
+        _dict: dict[str, list[str]] = {}
         _list: list[str] = self.cmd(f"LIST {sub} {device}")
         for _kv in _list:
-            _kv: list[str] = shlex.split(_kv)
-            _k: str = _kv[0]
-            _v: str = _kv[1].replace('"', "")
+            _kl: list[str] = shlex.split(_kv)
+            _k: str = _kl[0]
+            _v: str = _kl[1].replace('"', "")
             _dict[_k] = [_v, _type]
         return _dict
 
