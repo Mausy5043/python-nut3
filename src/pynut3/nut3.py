@@ -254,9 +254,9 @@ class PyNUT3Client:
         _list: list[str] = self.cmd(f"LIST CMD {device}")
         _dict: dict[str, str] = {}
         for _cmd in _list:
-            _ret = " "
+            _ret: str = " "
             if self.descriptors:
-                _ret: str = self.cmd(f"GET CMDDESC {device} {_cmd}")[0]
+                _ret = self.cmd(f"GET CMDDESC {device} {_cmd}")[0]
             _dict[_cmd] = _ret.replace('"', "")
         return _dict
 
