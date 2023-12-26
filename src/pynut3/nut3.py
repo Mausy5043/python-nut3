@@ -237,7 +237,7 @@ class PyNUT3Client:
         except (pexpect.ExceptionPexpect, EOFError, BrokenPipeError):
             _LOGGER.error("NUT3 problem writing to server.")
 
-    def _call(self, command) -> list[str]:
+    def _call(self, command: str) -> list[str]:
         if not self._persistent:
             self._connect()
 
@@ -349,7 +349,7 @@ class PyNUT3Client:
                 _mod_list.append(_s.replace("\r", ""))
         return _mod_list
 
-    def get_var_desc(self, device, variable) -> str:
+    def get_var_desc(self, device: str, variable: str) -> str:
         """Request the description of variable from device."""
         _desc: str = self.cmd(f"GET DESC {device} {variable}")[0].replace('"', "")
         return _desc
