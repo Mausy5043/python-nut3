@@ -314,7 +314,7 @@ class PyNUT3Client:
         _ups: list[str] = []
         for _entry in _list:
             _ups = shlex.split(_entry)
-            _dict[_ups[1]] = _ups[2]
+            _dict[_ups[0]] = _ups[1]
         return _dict
 
     def _get_vars(self, device: str, sub: str) -> dict[str, str]:
