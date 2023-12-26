@@ -237,6 +237,61 @@ class PyNUT3Client:
         except (pexpect.ExceptionPexpect, EOFError, BrokenPipeError):
             _LOGGER.error("NUT3 problem writing to server.")
 
+    def _call(self, command) -> list[str]:
+        if not self._persistent:
+            self._connect()
+
+        self._write(command)
+        _returned_list: list[str] = self._read()
+
+        if not self._persistent:
+            self._disconnect()
+
+        return _returned_list
+
+    def _get_commands(self, device: str) -> dict[str, str]:
+        """Return a list of commands supported by the device."""
+        _list: list[str] = self.cmd(f"LIST CMD {device}")
+        _dict: dict[str, str] = {}
+        for _cmd in _list:
+            _ret = " "
+            if self.descriptors:
+                _ret: str = self.cmd(f"GET CMDDESC {device} {_cmd}")[0]
+            _dict[_cmd] = _ret.replace('"', "")
+        return _dict
+
+    def _get_devices(self) -> dict[str, str]:
+        """Return a dict of devices connected to this server.
+
+        Returns:
+            dict containing device name and description.
+        """
+        _dict: dict[str, str] = {}
+        _list: list[str] = self.cmd("LIST UPS")
+        _ups: list[str] = []
+        for _entry in _list:
+            _ups = shlex.split(_entry)
+            _dict[_ups[0]] = _ups[1]
+        return _dict
+
+    def _get_vars(self, device: str, sub: str) -> dict[str, list[str]]:
+        """Return a dict of variables and their current values.
+
+        Returns:
+            dict containing variable name and current value.
+        """
+        _type: str = "r-"
+        if sub == "RW":
+            _type = "rw"
+        _dict: dict[str, list[str]] = {}
+        _list: list[str] = self.cmd(f"LIST {sub} {device}")
+        for _kv in _list:
+            _kl: list[str] = shlex.split(_kv)
+            _k: str = _kl[0]
+            _v: str = _kl[1].replace('"', "")
+            _dict[_k] = [_v, _type]
+        return _dict
+
     def cmd(self, command: str) -> list[str]:
         """Execute a valid supported command and return anything that gets returned.
 
@@ -294,65 +349,20 @@ class PyNUT3Client:
                 _mod_list.append(_s.replace("\r", ""))
         return _mod_list
 
-    def _call(self, command):
-        if not self._persistent:
-            self._connect()
-
-        self._write(command)
-        _returned_list: list[str] = self._read()
-
-        if not self._persistent:
-            self._disconnect()
-
-        return _returned_list
-
-    def _get_commands(self, device: str) -> dict[str, str]:
-        """Return a list of commands supported by the device."""
-        _list: list[str] = self.cmd(f"LIST CMD {device}")
-        _dict: dict[str, str] = {}
-        for _cmd in _list:
-            _ret = " "
-            if self.descriptors:
-                _ret: str = self.cmd(f"GET CMDDESC {device} {_cmd}")[0]
-            _dict[_cmd] = _ret.replace('"', "")
-        return _dict
-
-    def _get_devices(self) -> dict[str, str]:
-        """Return a dict of devices connected to this server.
-
-        Returns:
-            dict containing device name and description.
-        """
-        _dict: dict[str, str] = {}
-        _list: list[str] = self.cmd("LIST UPS")
-        _ups: list[str] = []
-        for _entry in _list:
-            _ups = shlex.split(_entry)
-            _dict[_ups[0]] = _ups[1]
-        return _dict
-
-    def _get_vars(self, device: str, sub: str) -> dict[str, list[str]]:
-        """Return a dict of variables and their current values.
-
-        Returns:
-            dict containing variable name and current value.
-        """
-        _type: str = "r-"
-        if sub == "RW":
-            _type = "rw"
-        _dict: dict[str, list[str]] = {}
-        _list: list[str] = self.cmd(f"LIST {sub} {device}")
-        for _kv in _list:
-            _kl: list[str] = shlex.split(_kv)
-            _k: str = _kl[0]
-            _v: str = _kl[1].replace('"', "")
-            _dict[_k] = [_v, _type]
-        return _dict
-
     def get_var_desc(self, device, variable) -> str:
         """Request the description of variable from device."""
         _desc: str = self.cmd(f"GET DESC {device} {variable}")[0].replace('"', "")
         return _desc
+
+    def help(self) -> list[str]:
+        """Execute HELP command.
+
+        Returns:
+            list of commands supported by pynut3.
+        """
+        result: list[str] = self.cmd("HELP")
+        valid_commands: list[str] = result[0].split()[1:]
+        return valid_commands
 
     def update(self, device: str) -> None:
         """Update the values of the variables for the given device."""
@@ -366,16 +376,6 @@ class PyNUT3Client:
         _dev: str
         for _dev in self.connected_devices:
             self.update(_dev)
-
-    def help(self) -> list[str]:
-        """Execute HELP command.
-
-        Returns:
-            list of commands supported by pynut3.
-        """
-        result: list[str] = self.cmd("HELP")
-        valid_commands: list[str] = result[0].split()[1:]
-        return valid_commands
 
     def version(self) -> str:
         """Execute VER and PROTVER command.
