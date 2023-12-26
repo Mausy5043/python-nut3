@@ -81,9 +81,11 @@ class PyNUT3Client:
     """Access NUT (Network UPS Tools) servers.
 
     Attributes:
-        valid_commands: list of commands that the server accepts
-        connected_devices: dict: key is the name of each device connected to the server, value is the device description
-        device_state: dict containing, per device, all supported instant commands and the variables with their values.
+        valid_commands: (list) commands that the server accepts.
+        connected_devices: (dict) key is the name of each device connected to the server,
+        value is the device description.
+        device_state: (dict) containing, per device, all supported instant commands
+        and the variables with their values.
     """
 
     # pylint: disable=too-many-instance-attributes
@@ -101,21 +103,16 @@ class PyNUT3Client:
         """Class initialization method.
 
         Args:
-            host: Host to connect (defaults to 127.0.0.1).
-            port: Port where NUT listens for connections (defaults to 3493)
-            login: Login used to connect to NUT server (defaults to None
-                    for no authentication).
-            password: Password used for authentication (defaults to None).
-            timeout: Timeout used to wait for network response (defaults
-                      to 2 seconds).
-            persistent: Boolean, when true connection will be made in init method
-                            and be held open, when false connection is open/closed
-                            when calling each method
-            descriptors: Boolean, when true will also read descriptions of commands
-                            and variables from the device(s)
-            debug: Boolean, put class in debug mode (prints everything
-                            on console, defaults to False).
-
+            host: Host to connect (default: 127.0.0.1).
+            port: Port where NUT listens for connections (default: 3493).
+            login: Login used to connect to NUT server (default: None for no authentication).
+            password: Password used for authentication (default: None).
+            timeout: Timeout used to wait for network response (default: 2 seconds).
+            persistent: When True connection will be made in init method and be
+            held open; When False connection is open and closed when needed (default: True).
+            descriptors: When True will also read descriptions of commands and variables
+            from the device(s) (default: False as it is time-consuming).
+            debug: When True put class in debug mode and print stuff on console (default: False).
         """
         _LOGGER.debug(f"NUT Class initialization on: {host}:{port}, Login: {login}")
 
@@ -293,7 +290,7 @@ class PyNUT3Client:
         return _dict
 
     def cmd(self, command: str) -> list[str]:
-        """Execute a valid supported command and return anything that gets returned.
+        """Execute a valid supported command on the server and return anything that gets returned.
 
         Args:
             command: command to be sent
@@ -334,7 +331,7 @@ class PyNUT3Client:
             # sub-command does not have a parameter, but parameter was passed
             raise PyNUT3Error(f"'{main_cmd} {sub_cmd} {par_cmd}' is not supported by pynut3.")
 
-        _returned_list = self._call(command)
+        _returned_list: list[str] = self._call(command)
 
         _mod_list: list[str] = []
         _s: str
@@ -350,7 +347,15 @@ class PyNUT3Client:
         return _mod_list
 
     def get_var_desc(self, device: str, variable: str) -> str:
-        """Request the description of variable from device."""
+        """Request the description of variable from device.
+
+        Args:
+            device: name of the device
+            variable: name of the variable
+
+        Returns:
+            description of the variable, if known by the device.
+        """
         _desc: str = self.cmd(f"GET DESC {device} {variable}")[0].replace('"', "")
         return _desc
 
@@ -358,21 +363,35 @@ class PyNUT3Client:
         """Execute HELP command.
 
         Returns:
-            list of commands supported by pynut3.
+            list of commands supported by the server.
         """
         result: list[str] = self.cmd("HELP")
         valid_commands: list[str] = result[0].split()[1:]
         return valid_commands
 
     def update(self, device: str) -> None:
-        """Update the values of the variables for the given device."""
+        """Update the values of the variables for the given device.
+
+        Args:
+            device: name of the device
+
+        Returns:
+            Nothing. Instead, calling this will update the values
+            in PyNUT3Client.device_state[device]
+        """
         _k: str
         _v: list[str]
         for _k, _v in self._get_vars(device, "VAR").items():
             self.device_state[device]["vars"][_k][0] = _v[0]
 
     def update_all(self) -> None:
-        """Update the values of the variables for all devices."""
+        """Update the values of all the variables for all devices.
+
+        Returns:
+            Nothing. Instead, calling this will update the values in
+            PyNUT3Client.device_state for all devices.
+        """
+
         _dev: str
         for _dev in self.connected_devices:
             self.update(_dev)
