@@ -78,7 +78,13 @@ class PyNUT3Error(Exception):
 
 
 class PyNUT3Client:
-    """Access NUT (Network UPS Tools) servers."""
+    """Access NUT (Network UPS Tools) servers.
+
+    Attributes:
+        valid_commands: list of commands that the server accepts
+        connected_devices: dict: key is the name of each device connected to the server, value is the device description
+        device_state: dict containing, per device, all supported instant commands and the variables with their values.
+    """
 
     # pylint: disable=too-many-instance-attributes
     def __init__(
@@ -93,18 +99,22 @@ class PyNUT3Client:
     ) -> None:
         """Class initialization method.
 
-        host        : Host to connect (defaults to 127.0.0.1).
-        port        : Port where NUT listens for connections (defaults to 3493)
-        login       : Login used to connect to NUT server (defaults to None
-                        for no authentication).
-        password    : Password used for authentication (defaults to None).
-        timeout     : Timeout used to wait for network response (defaults
-                        to 2 seconds).
-        persistent  : Boolean, when true connection will be made in init method
-                        and be held open, when false connection is open/closed
-                        when calling each method
-        debug       : Boolean, put class in debug mode (prints everything
-                        on console, defaults to False).
+        Args:
+            host: Host to connect (defaults to 127.0.0.1).
+            port: Port where NUT listens for connections (defaults to 3493)
+            login: Login used to connect to NUT server (defaults to None
+                    for no authentication).
+            password: Password used for authentication (defaults to None).
+            timeout: Timeout used to wait for network response (defaults
+                      to 2 seconds).
+            persistent: Boolean, when true connection will be made in init method
+                            and be held open, when false connection is open/closed
+                            when calling each method
+            descriptors: Boolean, when true will also read descriptions of commands
+                            and variables from the device(s)
+            debug: Boolean, put class in debug mode (prints everything
+                            on console, defaults to False).
+
         """
         _LOGGER.debug(f"NUT Class initialization on: {host}:{port}, Login: {login}")
 
@@ -324,7 +334,7 @@ class PyNUT3Client:
         """Execute HELP command.
 
         Returns:
-            list of commands supported by the stack.
+            list of commands supported by pynut3.
         """
         result: list[str] = self.cmd("HELP")
         valid_commands: list[str] = result[0].split()[1:]
