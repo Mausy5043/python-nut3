@@ -291,10 +291,17 @@ class PyNUT3Client:
             self._disconnect()
 
         return _returned_list
+
+    def _get_commands(self, device: str) -> dict[str, str]:
         """Return a list of commands supported by the device."""
-        _dict: dict[str, list[str]] = {}
-        _list = self.cmd(f"LIST CMD {device}")
-        return _list
+        _list: list[str] = self.cmd(f"LIST CMD {device}")
+        _dict: dict[str, str] = {}
+        for _cmd in _list:
+            _ret = " "
+            if self.descriptors:
+                _ret: str = self.cmd(f"GET CMDDESC {device} {_cmd}")[0]
+            _dict[_cmd] = _ret.replace('"', "")
+        return _dict
 
     def _get_devices(self) -> dict[str, str]:
         """Return a dict of devices connected to this server.
