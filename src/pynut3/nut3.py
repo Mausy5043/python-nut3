@@ -287,7 +287,17 @@ class PyNUT3Client:
                 _mod_list.append(_s.replace("\r", ""))
         return _mod_list
 
-    def _get_commands(self, device: str) -> dict[str, list[str]]:
+    def _call(self, command):
+        if not self._persistent:
+            self._connect()
+
+        self._write(command)
+        _returned_list: list[str] = self._read()
+
+        if not self._persistent:
+            self._disconnect()
+
+        return _returned_list
         """Return a list of commands supported by the device."""
         _dict: dict[str, list[str]] = {}
         _list = self.cmd(f"LIST CMD {device}")
