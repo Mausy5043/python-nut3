@@ -335,12 +335,23 @@ class PyNUT3Client:
             _dict[_k] = [_v, _type]
         return _dict
 
-    def update(self, device) -> None:
-        for k, v in self._get_vars(device, "VAR").items():
-            self.devices[device]["vars"][k][0] = v[0]
+    def get_var_desc(self, device, variable) -> str:
+        """Request the description of variable from device."""
+        _desc: str = self.cmd(f"GET DESC {device} {variable}")[0].replace('"', "")
+        return _desc
 
-    # def device_vars(self):
-    #     return self._get_vars()
+    def update(self, device: str) -> None:
+        """Update the values of the variables for the given device."""
+        _k: str
+        _v: list[str]
+        for _k, _v in self._get_vars(device, "VAR").items():
+            self.device_state[device]["vars"][_k][0] = _v[0]
+
+    def update_all(self) -> None:
+        """Update the values of the variables for all devices."""
+        _dev: str
+        for _dev in self.connected_devices:
+            self.update(_dev)
 
     def help(self) -> list[str]:
         """Execute HELP command.
