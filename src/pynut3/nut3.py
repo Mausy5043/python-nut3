@@ -260,6 +260,10 @@ class PyNUT3Client:
         except IndexError:
             par_cmd = ""
 
+        ignored_response = " ".join(command.split(" ")[1:])
+        if not ignored_response:
+            ignored_response = f"{sub_cmd} {par_cmd} "
+
         if main_cmd not in self.valid_commands:
             # unknown command
             raise PyNUT3Error(f"{main_cmd} is not supported by the server.")
@@ -271,7 +275,7 @@ class PyNUT3Client:
             # unsupported sub-command
             # OR sub-command without required parameter
             raise PyNUT3Error(f"'{main_cmd} {sub_cmd}' is not supported by pynut3.")
-        if (sub_cmd and par_cmd) and f"{sub_cmd} %" not in SUPPORTED[main_cmd]:
+        if (sub_cmd and par_cmd) and f"{sub_cmd} %u" not in SUPPORTED[main_cmd]:
             # sub-command does not have a parameter, but parameter was passed
             raise PyNUT3Error(f"'{main_cmd} {sub_cmd} {par_cmd}' is not supported by pynut3.")
 
@@ -285,7 +289,7 @@ class PyNUT3Client:
             if "END" == _s.split(" ")[0]:
                 _s = ""
             if _s:
-                _s = _s.replace(f"{sub_cmd} {par_cmd} ", "")
+                _s = _s.replace(f"{ignored_response} ", "")
             if _s:
                 _mod_list.append(_s.replace("\r", ""))
         return _mod_list
