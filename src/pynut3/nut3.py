@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 """A Python3 module for communicating with NUT (Network UPS Tools) servers.
+In the sense of RFC-9271 this module provides a Management Daemon with limited capabilities.
+Only monitoring functionality is currently supported.
 
 * PyNUT3Error: Base class for custom exceptions.
 * PyNUT3Client: Allows connecting to and communicating with PyNUT servers.
@@ -57,13 +59,16 @@ logging.basicConfig(
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 DEBUG = False
 
-# list of supported commands (ref. RFC-9271)
-# USERNAME and PASSWORD are not in this list as login is part of the class.__init__
+# List of supported commands (ref. RFC-9271):
+#   USERNAME and PASSWORD are not in this list as login is part of the class.__init__
+#   ATTACH and DETACH are not supported because this is a monitor only.
+#   FSD is not supported for security reasons.
 SUPPORTED: dict[str, list[str]] = {
-    "commands": ["VER", "HELP", "LOGOUT", "LIST", "PROTVER"],
+    "commands": ["VER", "HELP", "LOGOUT", "LIST", "PROTVER", "GET"],
     # For the following commands the listed sub-commands are supported.
-    # A `%` is used to indicate that an additional parameter is required.
-    "LIST": ["CLIENT %", "CMD %", "RW %", "UPS", "VAR %"],
+    # A `%u` is used to indicate that an additional parameter is required.
+    "LIST": ["CLIENT %u", "CMD %u", "RW %u", "UPS", "VAR %u"],
+    "GET": ["CMDDESC %u", "DESC %u", "NUMATTACH %u", "NUMLOGINS %u", "UPSDESC %u"],
 }
 TIMEOUT: int = 2
 
