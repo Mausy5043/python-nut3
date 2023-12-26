@@ -486,47 +486,6 @@ if __name__ == "__main__":
     #     if not self._persistent:
     #         self._disconnect()
 
-    # def get_var(self, ups: str, var: str) -> str:
-    #     """Get the value of a variable."""
-    #     _LOGGER.debug(f"NUT3 requesting get_var '{var}' on '{self._host}'.")
-
-    #     if not self._persistent:
-    #         self._connect()
-
-    #     self._write(f"GET VAR {ups} {var}\n")
-    #     result: str = self._read("\n")
-
-    #     if not self._persistent:
-    #         self._disconnect()
-
-    #     try:
-    #         return result.split('"')[1].strip()
-    #     except IndexError as exc:
-    #         raise PyNUT3Error(result.replace("\n", "")) from exc
-
-    # # Alias for convenience
-    # def get(self, ups: str, var: str) -> str:
-    #     """Get the value of a variable (alias for get_var)."""
-    #     return self.get_var(ups, var)
-
-    # def var_description(self, ups: str, var: str) -> str:
-    #     """Get a variable's description."""
-    #     _LOGGER.debug(f"NUT3 requesting var_description '{var}' on '{self._host}'.")
-
-    #     if not self._persistent:
-    #         self._connect()
-
-    #     self._write(f"GET DESC {ups} {var}\n")
-    #     result: str = self._read("\n")
-
-    #     if not self._persistent:
-    #         self._disconnect()
-
-    #     try:
-    #         return result.split('"')[1].strip()
-    #     except IndexError as exc:
-    #         raise PyNUT3Error(result.replace("\n", "")) from exc
-
     # def var_type(self, ups: str, var: str) -> str:
     #     """Get a variable's type."""
     #     _LOGGER.debug(f"NUT3 requesting var_type '{var}' on '{self._host}'.")
@@ -550,24 +509,6 @@ if __name__ == "__main__":
 
     #     return type_
 
-    # def command_description(self, ups: str, command: str) -> str:
-    #     """Get a command's description."""
-    #     _LOGGER.debug(f"NUT3 requesting command_description '{command}' on '{self._host}'.")
-
-    #     if not self._persistent:
-    #         self._connect()
-
-    #     self._write(f"GET CMDDESC {ups} {command}\n")
-    #     result: str = self._read("\n")
-
-    #     if not self._persistent:
-    #         self._disconnect()
-
-    #     try:
-    #         return result.split('"')[1].strip()
-    #     except IndexError as exc:
-    #         raise PyNUT3Error(result.replace("\n", "")) from exc
-
     # def run_command(self, ups: str, command: str) -> None:
     #     """Send a command to the specified UPS."""
     #     _LOGGER.debug(f"NUT3 run_command called '{command}' on '{self._host}'.")
@@ -579,27 +520,6 @@ if __name__ == "__main__":
     #     result: str = self._read("\n")
 
     #     if result != "OK\n":
-    #         raise PyNUT3Error(result.replace("\n", ""))
-
-    #     if not self._persistent:
-    #         self._disconnect()
-
-    # def fsd(self, ups: str) -> None:
-    #     """Send MASTER and Forced ShutDown (FSD) commands."""
-    #     _LOGGER.debug("NUT3 MASTER called on '{self._host}'.")
-
-    #     if not self._persistent:
-    #         self._connect()
-
-    #     self._write(f"MASTER {ups}\n")
-    #     result: str = self._read("\n")
-    #     if result != "OK MASTER-GRANTED\n":
-    #         raise PyNUT3Error(("Master level functions are not available", ""))
-
-    #     _LOGGER.debug("FSD called...")
-    #     self._write(f"FSD {ups}\n")
-    #     result = self._read("\n")
-    #     if result != "OK FSD-SET\n":
     #         raise PyNUT3Error(result.replace("\n", ""))
 
     #     if not self._persistent:
