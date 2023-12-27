@@ -30,6 +30,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 import logging.handlers
 import platform
 import shlex
+import time
+
 from typing import Any, Optional
 
 import pexpect
@@ -149,6 +151,12 @@ class PyNUT3Client:
                 else:
                     v.append(" ")
                 self.devices[_dev]["vars"][k] = v
+            _t: float = time.time()
+            # to be able to determine the staleness of the data we record the time of the last update
+            # in both a formatted string for humans...
+            self.devices[_dev]["timestamp"] = time.strftime('%Y-%m-%d %H:%M %Z', time.localtime(_t))
+            # ... and a UN*X-epoch for automated checks.
+            self.devices[_dev]["timestamp-x"] = _t
 
     def __enter__(self) -> "PyNUT3Client":
         return self
@@ -386,6 +394,10 @@ class PyNUT3Client:
         _v: list[str]
         for _k, _v in self._get_vars(device, "VAR").items():
             self.devices[device]["vars"][_k][0] = _v[0]
+        _t = time.time()
+        # update the timestamps
+        self.devices[device]["timestamp"] = time.strftime('%Y-%m-%d %H:%M %Z', time.localtime(_t))
+        self.devices[device]["timestamp-x"] = _t
 
     def update_all(self) -> None:
         """Update the values of all the variables for all devices.
