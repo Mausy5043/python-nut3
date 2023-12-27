@@ -293,7 +293,7 @@ class PyNUT3Client:
         Returns:
             sanitized output from command
         """
-        if DEBUG:
+        if self._debug:
             _LOGGER.debug(f"NUT3 {command} requested on '{self._host}'")
             print(f">> .{command}.")
         splt_cmd: list[str] = command.split(" ")
@@ -311,6 +311,9 @@ class PyNUT3Client:
         if not ignored_response:
             ignored_response = f"{sub_cmd} {par_cmd} "
 
+        if self._debug:
+            print(f">> ignoring : .{ignored_response}.")
+
         if main_cmd not in self.valid_commands:
             # unknown command
             raise PyNUT3Error(f"{main_cmd} is not supported by the server.")
@@ -327,6 +330,8 @@ class PyNUT3Client:
             raise PyNUT3Error(f"'{main_cmd} {sub_cmd} {par_cmd}' is not supported by pynut3.")
 
         _returned_list: list[str] = self._call(command)
+        if self._debug:
+            print(f">> returned : {_returned_list}")
 
         _mod_list: list[str] = []
         _s: str
@@ -339,6 +344,9 @@ class PyNUT3Client:
                 _s = _s.replace(f"{ignored_response} ", "")
             if _s:
                 _mod_list.append(_s.replace("\r", ""))
+        if self._debug:
+            print(f">> result   : {_mod_list}")
+            print()
         return _mod_list
 
     def get_var_desc(self, device: str, variable: str) -> str:
