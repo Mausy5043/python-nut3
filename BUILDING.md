@@ -8,7 +8,9 @@ We try to follow [semantic versioning](https://semver.org).
 -   Stable/production versions are identified by even-numbered MINOR versions.
 -   MAJOR versions increase only when significant changes are made.
 
-## Building the package for testing
+The following is documented here so I don't have to remember ;-)
+
+## Building the package for testing (OWNERS ONLY)
 
 To test changes the package may be built and uploaded to [test.pypi.org](https://test.pypi.org)
 Preferably changes are done on a separate branch.
@@ -26,7 +28,7 @@ Preferably changes are done on a separate branch.
 8.  After succesfull testing create a pull request to merge the changes into the `devel` branch.
 
 
-## Building the package for distribution
+## Building the package for distribution (OWNERS ONLY)
 
 To distribute a new production version the package must be built and uploaded to [pypi.org](https://pypi.org)
 

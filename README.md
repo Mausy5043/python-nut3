@@ -7,17 +7,13 @@
 
 #### (aka python-nut3)
 
-This is a Python3 library to allow communication with
-NUT ([Network UPS Tools](http://www.networkupstools.org/)) Uninterruptible Power Supply servers following [RFC-9271](https://www.rfc-editor.org/rfc/rfc9271.html)
+This is a Python3 library to allow communication with NUT ([Network UPS Tools](http://www.networkupstools.org/)) Uninterruptible Power Supply servers following [RFC-9271](https://www.rfc-editor.org/rfc/rfc9271.html)
 
-**Note**: This is an unofficial project, and is in no way supported or endorsed by
-the [Network UPS Tools developers](https://github.com/networkupstools).
+**Note**: This is an unofficial project, and is in no way supported or endorsed by the [Network UPS Tools developers](https://github.com/networkupstools).
 
 ## Requirements
 
-Development of this package is done in Python 3.11. The package is considered forwards compatible
-probably upto Python 3.12 and possibly also beyond. Backwards compatibility is not guaranteed; if
-it works on Python 3.9 or before consider yourself lucky.
+Development of this package is done in Python 3.11. The package is considered forwards compatible probably upto Python 3.12 and possibly also beyond. Backwards compatibility is not guaranteed on versions prior to 3.9; if it works on Python 3.8 or before consider yourself lucky.  
 [Python versions that are end-of-life](https://devguide.python.org/versions/) are not supported.
 
 ## Installation
@@ -31,13 +27,13 @@ Then install using:
 ```bash
 python -m pip install pynut3
 ```
+This software was not tested on systems other than Linux (Debian) and macOS. If you have access to another OS, feel free to contribute improvements for support.
 
 ## Usage
 
 See `demo/upsdemo.py` for a usage example.
 
-Please note that this module has completely and intentionally broken backwards compatibility
-with (previous) versions of pynut3.
+Please note that this module has completely and intentionally broken backwards compatibility with (previous) versions of pynut3.
 
 ## Acknowledgements
 
