@@ -326,14 +326,20 @@ class PyNUT3Client:
 
         if main_cmd not in self.valid_commands:
             # unknown command
+            if self._debug:
+                print(f"Valid commands: {self.valid_commands}")
             raise PyNUT3Error(f"{main_cmd} is not supported by the server.")
 
         if main_cmd not in SUPPORTED["commands"]:
             # unsupported command
+            if self._debug:
+                print(f"Supported commands: {SUPPORTED['commands']}")
             raise PyNUT3Error(f"'{main_cmd}' is not supported by pynut3.")
         if (sub_cmd and not par_cmd) and sub_cmd not in SUPPORTED[main_cmd]:
             # unsupported sub-command
             # OR sub-command without required parameter
+            if self._debug:
+                print(f"Supported sub-commands for {main_cmd}: {SUPPORTED[main_cmd]}")
             raise PyNUT3Error(f"'{main_cmd} {sub_cmd}' is not supported by pynut3.")
         if (sub_cmd and par_cmd) and f"{sub_cmd} %u" not in SUPPORTED[main_cmd]:
             # sub-command does not have a parameter, but parameter was passed
@@ -378,8 +384,12 @@ class PyNUT3Client:
         Returns:
             list of commands supported by the server.
         """
-        result: list[str] = self.cmd("HELP")
-        valid_commands: list[str] = result[0].split()[1:]
+        result: str = self.cmd("HELP")[-1]
+        if self._debug:
+            print(f"HELP result : {result}")
+        valid_commands: list[str] = result.split()[1:]
+        if self._debug:
+            print(f"HELP valid  : {valid_commands}")
         return valid_commands
 
     def update(self, device: str) -> None:
@@ -424,6 +434,11 @@ class PyNUT3Client:
 
 if __name__ == "__main__":
     print("Must be imported to use.")
+    client = PyNUT3Client(host="192.168.2.17",  debug=True)
+
+    # client.version returns a string cnontaining the version of the server
+    print(client.version())
+    print()
 
     # def list_enum(self, ups: str, var: str) -> List[str]:
     #     """Get a list of valid values for an enum variable.
