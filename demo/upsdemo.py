@@ -3,7 +3,7 @@
 
 """A demonstration of the use of the `python-nut3` package.
 
-Copyright (c) 2022 Mausy5043
+Copyright (c) 2023 Mausy5043
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
