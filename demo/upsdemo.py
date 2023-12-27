@@ -47,8 +47,8 @@ def demo(ip: str) -> None:
     # not such a good idea because it will make the initialisation slo-o-ow.
     client = nut3.PyNUT3Client(host=ip, decriptors=True)
 
-    # client.ver returns a string
-    print(f"\nNUT driver version: {client.ver()}")
+    # client.version returns a string cnontaining the version of the server
+    print(f"\nNUT driver version: {client.version()}")
     print("Scanning for UPSes...")
     # client.get_dict_ups returns a dict
     ups_dict = client.get_dict_ups()
