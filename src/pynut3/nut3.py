@@ -82,10 +82,7 @@ class PyNUT3Client:
 
     Attributes:
         valid_commands: (list) commands that the server accepts.
-        connected_devices: (dict) key is the name of each device connected to the server,
-        value is the device description.
-        device_state: (dict) containing, per device, all supported instant commands
-        and the variables with their values.
+        devices: (dict) containing, per device, all data and supported instant commands.
     """
 
     # pylint: disable=too-many-instance-attributes
@@ -135,25 +132,23 @@ class PyNUT3Client:
         self.valid_commands.append("PROTVER")
 
         # build the list of connected NUT-capable devices
-        self.connected_devices: dict[str, str] = self._get_devices()
+        self.devices: dict[str, dict] = self._get_devices()
         # build
-        self.device_state: dict[str, dict] = {}  # type: ignore[type-arg]
-        for _dev in self.connected_devices:
-            self.device_state[_dev] = {}
+        for _dev in self.devices:
             # get commands supported by the device
-            self.device_state[_dev]["commands"] = self._get_commands(_dev)
+            self.devices[_dev]["commands"] = self._get_commands(_dev)
             # get all the variables the device knows about
-            self.device_state[_dev]["vars"] = self._get_vars(_dev, "VAR")
+            self.devices[_dev]["vars"] = self._get_vars(_dev, "VAR")
             # add info about the r/w variables
             for k, v in self._get_vars(_dev, "RW").items():
-                self.device_state[_dev]["vars"][k] = v
+                self.devices[_dev]["vars"][k] = v
             # add variable descriptions if requested
-            for k, v in self.device_state[_dev]["vars"].items():
+            for k, v in self.devices[_dev]["vars"].items():
                 if descriptors:
                     v.append(self.get_var_desc(_dev, k))
                 else:
                     v.append(" ")
-                self.device_state[_dev]["vars"][k] = v
+                self.devices[_dev]["vars"][k] = v
 
     def __enter__(self) -> "PyNUT3Client":
         return self
@@ -257,18 +252,18 @@ class PyNUT3Client:
             _dict[_cmd] = _ret.replace('"', "")
         return _dict
 
-    def _get_devices(self) -> dict[str, str]:
+    def _get_devices(self) -> dict[str, dict]:
         """Return a dict of devices connected to this server.
 
         Returns:
             dict containing device name and description.
         """
-        _dict: dict[str, str] = {}
+        _dict: dict[str, dict] = {}
         _list: list[str] = self.cmd("LIST UPS")
         _ups: list[str] = []
         for _entry in _list:
             _ups = shlex.split(_entry)
-            _dict[_ups[0]] = _ups[1]
+            _dict[_ups[0]] = {"description": _ups[1]}
         return _dict
 
     def _get_vars(self, device: str, sub: str) -> dict[str, list[str]]:
@@ -382,7 +377,7 @@ class PyNUT3Client:
         _k: str
         _v: list[str]
         for _k, _v in self._get_vars(device, "VAR").items():
-            self.device_state[device]["vars"][_k][0] = _v[0]
+            self.devices[device]["vars"][_k][0] = _v[0]
 
     def update_all(self) -> None:
         """Update the values of all the variables for all devices.
@@ -393,7 +388,7 @@ class PyNUT3Client:
         """
 
         _dev: str
-        for _dev in self.connected_devices:
+        for _dev in self.devices:
             self.update(_dev)
 
     def version(self) -> str:
@@ -409,15 +404,15 @@ if __name__ == "__main__":
     client = PyNUT3Client(host="192.168.2.17")
     print(client.version())
     print("Connected Devices & Available Commands:")
-    for dev, desc in client.connected_devices.items():
-        print(f"    {dev:<32} : {desc}")
+    for device, state in client.devices.items():
+        print(f"    {device:<32} : {state['description']}")
         print("    Commands")
-        for name, desc in client.device_state[dev]["commands"].items():
+        for name, desc in state["commands"].items():
             print(f"        {name:<32}({desc})")
         print("    Variables & Settings")
-        for name, item in client.device_state[dev]["vars"].items():
+        for name, item in state["vars"].items():
             print(f"  ({item[1]})  {name:<32}= {item[0]:<30}({item[2]})")
-        print()
+        # print()
     client.update_all()
     print()
     print(client.cmd("LIST CLIENT ups"))
