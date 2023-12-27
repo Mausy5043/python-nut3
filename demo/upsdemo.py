@@ -43,7 +43,9 @@ def demo(ip: str) -> None:
     var: str
     value: str
 
-    client = nut3.PyNUT3Client(host=ip)
+    # For the demo we include descriptors. In normal use this is likely
+    # not such a good idea because it will make the initialisation slo-o-ow.
+    client = nut3.PyNUT3Client(host=ip, decriptors=True)
 
     # client.ver returns a string
     print(f"\nNUT driver version: {client.ver()}")
