@@ -50,13 +50,19 @@ def demo() -> None:
     parser.add_argument("-f", "--fast", action="store_true",
                         help="Skip fetching descriptions",
                         )
+    parser.add_argument("-d", "--debug", action="store_true",
+                        help="For debugging",
+                        )
     OPTION = parser.parse_args()
+    debug = False
+    if OPTION.debug:
+        debug = True
     desc = True
     if OPTION.fast:
         desc = False
     # For the demo we include descriptors. In normal use this is likely
     # not such a good idea because it will make the initialisation slo-o-ow.
-    client = nut3.PyNUT3Client(host=OPTION.server, descriptors=desc)
+    client = nut3.PyNUT3Client(host=OPTION.server, descriptors=desc, debug=debug)
 
     # client.version returns a string cnontaining the version of the server
     print(client.version())
