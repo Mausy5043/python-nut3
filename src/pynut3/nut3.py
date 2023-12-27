@@ -349,7 +349,7 @@ class PyNUT3Client:
             if "END" == _s.split(" ")[0]:
                 _s = ""
             if _s:
-                _s = _s.replace(f"{ignored_response} ", "")
+                _s = _s.replace(f"{ignored_response} ", "", 1)
             if _s:
                 _mod_list.append(_s.replace("\r", ""))
         if self._debug:
