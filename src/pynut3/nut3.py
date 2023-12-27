@@ -95,7 +95,7 @@ class PyNUT3Client:
         timeout: int = TIMEOUT,
         persistent: bool = True,
         descriptors: bool = False,
-        debug: bool = True,
+        debug: bool = DEBUG,
     ) -> None:
         """Class initialization method.
 
