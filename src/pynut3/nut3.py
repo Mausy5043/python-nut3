@@ -134,31 +134,31 @@ class PyNUT3Client:
         self.valid_commands.append("PROTVER")
 
         # build the list of connected NUT-capable devices
-        self.devices: dict[str, dict] = self._get_devices()
+        self.devices: dict[str, Any] = self._get_devices()
         # build
-        for _dev in self.devices:
+        for _dev in self.devices:  # pylint: disable=consider-using-dict-items
             # get commands supported by the device
-            self.devices[_dev]["commands"] = self._get_commands(_dev)
+            self.devices[_dev]["commands"] = self._get_commands(_dev)  # type: ignore[assignment]
             # get all the variables the device knows about
-            self.devices[_dev]["vars"] = self._get_vars(_dev, "VAR")
+            self.devices[_dev]["vars"] = self._get_vars(_dev, "VAR")  # type: ignore[assignment]
             # add info about the r/w variables
             for k, v in self._get_vars(_dev, "RW").items():
-                self.devices[_dev]["vars"][k] = v
+                self.devices[_dev]["vars"][k] = v  # type: ignore[index]
             # add variable descriptions if requested
-            for k, v in self.devices[_dev]["vars"].items():
+            for k, v in self.devices[_dev]["vars"].items():  # type: ignore[attr-defined]
                 if descriptors:
                     v.append(self.get_var_desc(_dev, k))
                 else:
                     v.append(" ")
-                self.devices[_dev]["vars"][k] = v
+                self.devices[_dev]["vars"][k] = v  # type: ignore[index]
             _t: float = time.time()
-            # to be able to determine the staleness of the data we record the time of the last update
-            # in both a formatted string for humans...
+            # to be able to determine the staleness of the data we record the time of the
+            # last update in both a formatted string for humans...
             self.devices[_dev]["timestamp"] = time.strftime(
                 "%Y-%m-%d %H:%M %Z", time.localtime(_t)
             )
             # ... and a UN*X-epoch for automated checks.
-            self.devices[_dev]["timestamp-x"] = _t
+            self.devices[_dev]["timestamp-x"] = str(_t)
 
     def __enter__(self) -> "PyNUT3Client":
         return self
@@ -262,13 +262,13 @@ class PyNUT3Client:
             _dict[_cmd] = _ret.replace('"', "")
         return _dict
 
-    def _get_devices(self) -> dict[str, dict]:
+    def _get_devices(self) -> dict[str, dict[str, str]]:
         """Return a dict of devices connected to this server.
 
         Returns:
             dict containing device name and description.
         """
-        _dict: dict[str, dict] = {}
+        _dict: dict[str, dict[str, str]] = {}
         _list: list[str] = self.cmd("LIST UPS")
         _ups: list[str] = []
         for _entry in _list:
@@ -399,7 +399,7 @@ class PyNUT3Client:
         _t = time.time()
         # update the timestamps
         self.devices[device]["timestamp"] = time.strftime("%Y-%m-%d %H:%M %Z", time.localtime(_t))
-        self.devices[device]["timestamp-x"] = _t
+        self.devices[device]["timestamp-x"] = str(_t)
 
     def update_all(self) -> None:
         """Update the values of all the variables for all devices.
