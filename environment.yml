@@ -9,7 +9,9 @@ channels:
 
 dependencies:
   - python=3.11
+  - pexpect
   - pip
   # Not on conda channels:
   - pip:
     - pylint
+    - types-pexpect

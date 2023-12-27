@@ -9,22 +9,23 @@ build-backend = "hatchling.build"
 name = "pynut3"
 description = "A Python3 abstraction class to access NUT servers for uninterruptible power supplies (UPS)."
 # version = "1.6.2" # latest production version
-version = "1.7.5" # latest testing version
-dependencies = []
+version = "2.1.4" # latest testing version
+dependencies = [
+    "pexpect",
+]
 license = "GPL-3.0-only"
 authors = [
   { name="Mausy5043" },
 ]
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Topic :: System :: Power (UPS)"
 ]
 
