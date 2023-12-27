@@ -47,12 +47,18 @@ def demo() -> None:
         required=True,
         help="IP-address or hostname of the UPS-server",
     )
-    parser.add_argument("-f", "--fast", action="store_true",
-                        help="Skip fetching descriptions",
-                        )
-    parser.add_argument("-d", "--debug", action="store_true",
-                        help="For debugging",
-                        )
+    parser.add_argument(
+        "-f",
+        "--fast",
+        action="store_true",
+        help="Skip fetching descriptions",
+    )
+    parser.add_argument(
+        "-d",
+        "--debug",
+        action="store_true",
+        help="For debugging",
+    )
     OPTION = parser.parse_args()
     debug = False
     if OPTION.debug:
