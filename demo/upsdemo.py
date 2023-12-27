@@ -40,9 +40,6 @@ def demo(ip: str) -> None:
     Returns:
         None
     """
-    var: str
-    value: str
-
     # For the demo we include descriptors. In normal use this is likely
     # not such a good idea because it will make the initialisation slo-o-ow.
     client = nut3.PyNUT3Client(host=ip, descriptors=True)
@@ -60,7 +57,7 @@ def demo(ip: str) -> None:
         print("    Variables & Settings")
         for name, item in state["vars"].items():
             print(f"  ({item[1]})  {name:<32}= {item[0]:<30}({item[2]})")
-        print(f"")
+        print()
     client.update_all()
     print()
     for device, state in client.devices.items():
