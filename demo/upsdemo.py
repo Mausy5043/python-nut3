@@ -23,7 +23,7 @@ import argparse
 import os
 import sys
 
-nut3_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..")) + "/src/"
+nut3_dir: str = os.path.abspath(os.path.join(os.path.dirname(__file__), "..")) + "/src/"
 sys.path.append(nut3_dir)
 
 # pylint: disable=wrong-import-position
@@ -45,46 +45,29 @@ def demo(ip: str) -> None:
 
     # For the demo we include descriptors. In normal use this is likely
     # not such a good idea because it will make the initialisation slo-o-ow.
-    client = nut3.PyNUT3Client(host=ip, decriptors=True)
+    client = nut3.PyNUT3Client(host=ip, descriptors=True)
 
     # client.version returns a string cnontaining the version of the server
-    print(f"\nNUT driver version: {client.version()}")
-    print("Scanning for UPSes...")
-    # client.get_dict_ups returns a dict
-    ups_dict = client.get_dict_ups()
-    for ups_id, desc in ups_dict.items():
-        print(f"'{desc}' is called with id '{ups_id}'")
-
-        # client.description returns a string
-        print(f"\nclient.description({ups_id}) returns: {client.description(ups_id)}")
-
-        # client.num_login returns the number of users logged into the UPS
-        print(f"Number of users : {client.num_logins(ups_id)}")
-
-        # client.get_dict_clients returns a dict of clients.
-        try:
-            clnts_dict = client.get_dict_clients(ups_id)
-            print(f"\nUPS '{ups_id}' has the following clients connected")
-            for _var, _value in clnts_dict.items():
-                print(f"{_var:<36}: {_value}")
-        except nut3.PyNUT3Error:
-            print(f"\n** UPS '{ups_id}' does not support listing it's clients")
-
-        # client.get_dict_vars returns a dict
-        vars_dict = client.get_dict_vars(ups_id)
-        rw_vars_dict = client.get_dict_rw_vars(ups_id)
-        print(f"\nUPS '{ups_id}' has the following variables available:")
-        for var, value in vars_dict.items():
-            rw_ro = "  (r-)"
-            if var in rw_vars_dict:
-                rw_ro = "  (rw)"
-            print(f"{rw_ro} {var:<36}: {value}")
-
-        # client.get_dict_commands returns a dict
-        cmds_dict = client.get_dict_commands(ups_id)
-        print(f"\nUPS '{ups_id}' has the following commands available")
-        for var, value in cmds_dict.items():
-            print(f"{var:<20}: {value}")
+    print(client.version())
+    print()
+    print("Connected Devices & Available Commands:")
+    for device, state in client.devices.items():
+        print(f"{state['timestamp']}")
+        print(f"    {device:<32} : {state['description']}")
+        print("    Commands")
+        for name, desc in state["commands"].items():
+            print(f"        {name:<32}({desc})")
+        print("    Variables & Settings")
+        for name, item in state["vars"].items():
+            print(f"  ({item[1]})  {name:<32}= {item[0]:<30}({item[2]})")
+        print(f"")
+    client.update_all()
+    print()
+    for device, state in client.devices.items():
+        print(f"{device} data updated on {state['timestamp']}")
+    # You can also send commands directly
+    print(client.cmd("LIST CLIENT ups"))
+    print(client.cmd("GET NUMLOGINS ups"))
 
 
 if __name__ == "__main__":

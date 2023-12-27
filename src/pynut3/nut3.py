@@ -425,6 +425,7 @@ if __name__ == "__main__":
     print(client.version())
     print("Connected Devices & Available Commands:")
     for device, state in client.devices.items():
+        print(f"{state['timestamp']}")
         print(f"    {device:<32} : {state['description']}")
         print("    Commands")
         for name, desc in state["commands"].items():
@@ -432,9 +433,12 @@ if __name__ == "__main__":
         print("    Variables & Settings")
         for name, item in state["vars"].items():
             print(f"  ({item[1]})  {name:<32}= {item[0]:<30}({item[2]})")
-        # print()
+        print(f"")
     client.update_all()
     print()
+    for device, state in client.devices.items():
+        print(f"{device} data updated on {state['timestamp']}")
+    # You can also send commands directly
     print(client.cmd("LIST CLIENT ups"))
     print(client.cmd("GET NUMLOGINS ups"))
 
