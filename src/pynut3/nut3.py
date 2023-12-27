@@ -154,7 +154,9 @@ class PyNUT3Client:
             _t: float = time.time()
             # to be able to determine the staleness of the data we record the time of the last update
             # in both a formatted string for humans...
-            self.devices[_dev]["timestamp"] = time.strftime('%Y-%m-%d %H:%M %Z', time.localtime(_t))
+            self.devices[_dev]["timestamp"] = time.strftime(
+                "%Y-%m-%d %H:%M %Z", time.localtime(_t)
+            )
             # ... and a UN*X-epoch for automated checks.
             self.devices[_dev]["timestamp-x"] = _t
 
@@ -396,7 +398,7 @@ class PyNUT3Client:
             self.devices[device]["vars"][_k][0] = _v[0]
         _t = time.time()
         # update the timestamps
-        self.devices[device]["timestamp"] = time.strftime('%Y-%m-%d %H:%M %Z', time.localtime(_t))
+        self.devices[device]["timestamp"] = time.strftime("%Y-%m-%d %H:%M %Z", time.localtime(_t))
         self.devices[device]["timestamp-x"] = _t
 
     def update_all(self) -> None:
@@ -421,26 +423,7 @@ class PyNUT3Client:
 
 
 if __name__ == "__main__":
-    client = PyNUT3Client(host="192.168.2.17")
-    print(client.version())
-    print("Connected Devices & Available Commands:")
-    for device, state in client.devices.items():
-        print(f"{state['timestamp']}")
-        print(f"    {device:<32} : {state['description']}")
-        print("    Commands")
-        for name, desc in state["commands"].items():
-            print(f"        {name:<32}({desc})")
-        print("    Variables & Settings")
-        for name, item in state["vars"].items():
-            print(f"  ({item[1]})  {name:<32}= {item[0]:<30}({item[2]})")
-        print(f"")
-    client.update_all()
-    print()
-    for device, state in client.devices.items():
-        print(f"{device} data updated on {state['timestamp']}")
-    # You can also send commands directly
-    print(client.cmd("LIST CLIENT ups"))
-    print(client.cmd("GET NUMLOGINS ups"))
+    print("Must be imported to use.")
 
     # def list_enum(self, ups: str, var: str) -> List[str]:
     #     """Get a list of valid values for an enum variable.
