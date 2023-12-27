@@ -22,7 +22,7 @@ it works on Python 3.9 or before consider yourself lucky.
 
 ## Installation
 
-On Linux systemsa `pynut3` requires telnet to be installed. If it is not available on your system you'll need to install it first. On macOS `telnet` is not needed; `nc` will be used automatically.
+On Linux systems `pynut3` requires telnet to be installed. If it is not available on your system you'll need to install it first. On macOS `telnet` is not needed; `nc` will be used automatically.
 ```bash
 sudo apt install telnet
 ```
@@ -34,24 +34,10 @@ python -m pip install pynut3
 
 ## Usage
 
-Assuming you have a UPS which is connected to a host on the network with IP `192.168.2.17` it can
-be interogated as follows:
-
-```python3
-from pynut3 import nut3
-
-client = nut3.PyNUT3Client(host='192.168.2.17')
-print(client.help())
-ups_dict = client.get_dict_ups()
-for k1, v1 in ups_dict.items():
-    print(f"{v1} is called with id {k1}")
-    vars_dict = client.get_dict_vars(k1)
-    for k2, v2 in vars_dict.items():
-        print(f"{k2}\t:\t{v2}")
-```
+See `demo/upsdemo.py` for a usage example.
 
 Please note that this module has completely and intentionally broken backwards compatibility
-with (previous) versions of PyNUT.
+with (previous) versions of pynut3.
 
 ## Acknowledgements
 
@@ -60,8 +46,7 @@ as [PyNUT](https://github.com/networkupstools/nut/tree/master/scripts/python), a
 Later overhauled by rshipp with Python3 modifications by hordurk, george2 and mezz64.
 Others will have contributed along the way. I was not able to reliably find their names.
 
-Further updates in this fork are by me (Mausy5043) and based/inspired on prior work from
-timurlenk07, StSAV012, rshipp & Rojer-X86.
+Further updates are by me (Mausy5043) and based/inspired on prior work from timurlenk07, StSAV012, rshipp & Rojer-X86.
 
 ## License
 
