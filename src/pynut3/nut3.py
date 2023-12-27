@@ -113,7 +113,7 @@ class PyNUT3Client:
             from the device(s) (default: False as it is time-consuming).
             debug: When True put class in debug mode and print stuff on console (default: False).
         """
-        _LOGGER.debug(f"NUT Class initialization on: {host}:{port}, Login: {login}")
+        _LOGGER.debug(f"NUT Class initialization on: {host}:{port}, Login: {login} started.")
 
         self._debug: bool = debug
         self._host: str = host
@@ -159,6 +159,9 @@ class PyNUT3Client:
             )
             # ... and a UN*X-epoch for automated checks.
             self.devices[_dev]["timestamp-x"] = str(_t)
+        _LOGGER.debug(
+            f"NUT Class initialization finished {time.strftime('%Y-%m-%d %H:%M %Z', time.localtime(time.time()))}."
+        )
 
     def __enter__(self) -> "PyNUT3Client":
         return self
