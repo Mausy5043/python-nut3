@@ -356,16 +356,17 @@ class PyNUT3Client:
         _s: str
         _begun: bool = False
         for _s in _returned_list:
+            _s = _s.replace("\r", "")
+            _s = _s.replace(f"{command}", "")
+            _s = _s.replace(f"{ignored_response} ", "", 1)
             if "BEGIN" == _s.split(" ")[0]:
-                _begun = True
+                # _begun = True
                 _s = ""
-            if _begun or main_cmd in ["HELP", "VER", "PROTVER"]:
-                if "END" == _s.split(" ")[0]:
-                    _s = ""
-                if _s:
-                    _s = _s.replace(f"{ignored_response} ", "", 1)
-                if _s:
-                    _mod_list.append(_s.replace("\r", ""))
+            #if _begun or main_cmd in ["HELP", "VER", "PROTVER"]:
+            if "END" == _s.split(" ")[0]:
+                _s = ""
+            if _s:
+                _mod_list.append(_s)
         if self._debug:
             print(f">> result   : {_mod_list}")
             print()
