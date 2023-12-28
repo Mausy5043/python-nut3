@@ -227,18 +227,18 @@ class PyNUT3Client:
                 break
         return _lines
 
-    def _write(self, string: str) -> None:
+    def _write(self, wstring: str) -> None:
         """Wrapper for _child write method.
 
         Args:
             string: string to be sent to the server.
         """
-        if DEBUG:
-            print("***", string)
+        if self._debug:
+            print(f"*** {wstring}")
         try:
             if not self._child:
                 raise RuntimeError("NUT3 connection has not been opened.")
-            self._child.sendline(string.encode("ascii"))
+            self._child.sendline(wstring.encode("ascii"))
         except (pexpect.ExceptionPexpect, EOFError, BrokenPipeError):
             _LOGGER.error("NUT3 problem writing to server.")
 
