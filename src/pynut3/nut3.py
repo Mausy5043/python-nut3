@@ -221,8 +221,12 @@ class PyNUT3Client:
             raise RuntimeError("NUT3 connection has not been opened.")
         while True:
             try:
-                self._child.expect([pexpect.EOF, "\n"], timeout)
+                index = self._child.expect([pexpect.EOF, "\n"], timeout)
                 _lines.append(f"{self._child.before.decode('utf-8')}")
+                if index == 0:
+                    # Connection closed
+                    _LOGGER.debug(f"Connection closed by the other end.")
+                    break
             except pexpect.exceptions.TIMEOUT:
                 break
         return _lines
