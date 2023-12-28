@@ -226,7 +226,7 @@ class PyNUT3Client:
                 _lines.append(f"{self._child.before.decode('utf-8')}")
                 if index == 0:
                     # Connection closed
-                    _LOGGER.debug(f"Connection closed by the other end.")
+                    _LOGGER.error(f"Connection closed by the other end.")
                     break
             except pexpect.exceptions.TIMEOUT:
                 break
