@@ -109,6 +109,7 @@ class PyNUT3Client:
             timeout: Timeout used to wait for network response (default: 2 seconds).
             persistent: When True connection will be made in init method and be
             held open; When False connection is open and closed when needed (default: True).
+            NOTE: setting this to True does not protect from the other end closing the connection!
             descriptors: When True will also read descriptions of commands and variables
             from the device(s) (default: False as it is time-consuming).
             debug: When True put class in debug mode and print stuff on console (default: False).
