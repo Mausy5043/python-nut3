@@ -13,16 +13,16 @@ This is a Python3 library to allow communication with NUT ([Network UPS Tools](h
 
 ## Requirements
 
-Development of this package is done in Python 3.11. The package is considered forwards compatible probably upto Python 3.12 and possibly also beyond. Backwards compatibility is not guaranteed on versions prior to 3.9; if it works on Python 3.8 or before consider yourself lucky.  
+Development of this package is done in Python 3.11. The package is considered forwards compatible probably upto Python 3.12 and possibly also beyond. Backwards compatibility is not guaranteed on versions prior to 3.9; if it works on Python 3.8 or before consider yourself lucky.
 [Python versions that are end-of-life](https://devguide.python.org/versions/) are not supported.
 
 ## Installation
 
-On Linux systems `pynut3` requires telnet to be installed. If it is not available on your system you'll need to install it first. On macOS `telnet` is not needed; `nc` will be used automatically.
+On Linux systems `pynut3` requires telnet to be installed. If it is not available on your system you'll need to install it first.
 ```bash
 sudo apt install telnet
 ```
-
+On macOS `telnet` is not needed; `nc` will be used automatically.  
 Then install using:
 ```bash
 python -m pip install pynut3
