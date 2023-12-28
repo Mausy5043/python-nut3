@@ -362,6 +362,8 @@ class PyNUT3Client:
             if "BEGIN" == _s.split(" ")[0]:
                 # _begun = True
                 _s = ""
+                # Throw away everything that came before
+                _mod_list = []
             # if _begun or main_cmd in ["HELP", "VER", "PROTVER"]:
             if "END" == _s.split(" ")[0]:
                 _s = ""
