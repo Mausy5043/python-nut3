@@ -3,7 +3,7 @@
 [![PyPI downloads](https://img.shields.io/pypi/dm/pynut3.svg)](https://pypistats.org/packages/pynut3)
 [![Code style: Black](https://img.shields.io/badge/code%20style-Black-000000.svg)](https://github.com/psf/black)
 
-# pynut3
+# (DEPRECATED) pynut3
 
 #### (aka python-nut3)
 
@@ -22,7 +22,7 @@ On Linux systems `pynut3` requires telnet to be installed. If it is not availabl
 ```bash
 sudo apt install telnet
 ```
-On macOS `telnet` is not needed; `nc` will be used automatically.  
+On macOS `telnet` is not needed; `nc` will be used automatically.
 Then install using:
 ```bash
 python -m pip install pynut3
