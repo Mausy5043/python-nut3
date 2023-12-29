@@ -1,12 +1,17 @@
 # When making changes to this file update requirements.txt also !!
+# Usage: conda -v env update -n python-nut3 --file environment.yml
+
+name: python-nut3
 
 channels:
   - conda-forge
   - defaults
 
 dependencies:
-  - python=3.10
+  - python=3.11
+  - pexpect
   - pip
   # Not on conda channels:
   - pip:
     - pylint
+    - types-pexpect

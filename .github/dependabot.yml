@@ -5,10 +5,7 @@
 
 version: 2
 updates:
-  # Enable version updates for python
   - package-ecosystem: 'pip'
-  # Look for `requirements.txt` file
     directory: '/'
-    target-branch: "latest"
     schedule:
-      interval: 'daily'
+      interval: 'monthly'
